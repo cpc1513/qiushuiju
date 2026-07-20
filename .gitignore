@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+*.log
+
+# 构建产物（由 build.js 生成，部署时自动重建，勿提交）
+/archive/
+/code/
+/reading/
+/essays/
+/photos/
+/post/
+/feed.xml
+/sitemap.xml
