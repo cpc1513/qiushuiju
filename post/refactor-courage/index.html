@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重构的勇气 · 秋水居</title>
+<meta name="description" content="面对一坨祖传的「面条」，谁都想掀桌重写。但真正的勇气不是推倒重来，而是在运行的系统上一寸一寸地把它理顺。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="alternate" type="application/rss+xml" title="秋水居" href="../../feed.xml">
+
+</head>
+<body class="sub-page">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="sealAge" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3" seed="7" result="warp"/>
+      <feDisplacementMap in="SourceGraphic" in2="warp" scale="5.5"/>
+    </filter>
+    <filter id="sealMottle" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="t"/>
+      <feColorMatrix in="t" type="matrix"
+        values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.4 0 0 0 -0.25" result="a"/>
+      <feComposite in="SourceGraphic" in2="a" operator="in"/>
+    </filter>
+  </defs>
+</svg>
+
+<header class="sub-topbar">
+  <a class="topbar-brand" href="../../"><svg viewBox="0 0 96 96" width="26" height="26" role="img" aria-label="秋水居印章">
+      <g filter="url(#sealAge)">
+        <rect x="10" y="10" width="76" height="76" rx="4" fill="#b03a24"/>
+        <text x="48" y="69" text-anchor="middle" font-size="54" font-weight="900"
+              fill="#f2eee1" font-family="'Noto Serif SC','Songti SC',serif">秋</text>
+      </g>
+      <rect x="10" y="10" width="76" height="76" fill="#f2eee1" opacity="0.35"
+            filter="url(#sealMottle)" style="mix-blend-mode:screen"/>
+    </svg>秋水居</a>
+  <nav class="topbar-nav">
+    <a href="../../code/">编程</a><a href="../../reading/">阅读</a><a href="../../photos/">摄影</a><a href="../../essays/">随笔</a><a href="../../archive/">归档</a><a href="../../#tools">工具</a>
+  </nav>
+</header>
+
+<main class="sub-main">
+
+  <article class="reader-article sub-article">
+    <p class="reader-cat">CODE · 编程</p>
+    <h1 class="reader-title">重构的勇气</h1>
+    <div class="reader-meta">
+      <span>2026.01.28</span>
+      <span>工程 · 随想</span>
+      <span>约 6 分钟</span>
+    </div>
+    
+    <div class="reader-body">
+      <p>组里接手了一个八年历史的服务，核心函数一千四百行，注释里躺着三位已经离职的工号。第一次评审会，所有人异口同声：重写吧。只有我投了反对票——不是不想，是不敢。这个服务每天经手上千万请求，它的每一行丑代码，都可能养着某个下游的隐式契约。</p>
+      <p>后来的方案很笨：先补测试，像给老宅子搭脚手架；再拆函数，每次只拆一小块，拆完就跑全量回归；最后才谈得上改结构。三个月下来，没有一天是痛快的，但也没有一天出过事故。到年底，那一千四百行变成了十几个平均六十行的小函数，注释里的工号换成了我们自己的。</p>
+      <p>《重构》里说，重构是「在不改变外部行为的前提下改善内部结构」。做了这些年工程，我越来越觉得这句话里真正的关键词是「不改变外部行为」——那是一种承诺，对世界说：请继续信任我，我只是在变好。</p>
+      <p>重写是少年心气，重构是中年修行。推倒重来固然痛快，但能在运行的系统上一寸一寸地理顺它，才是工程师真正的手艺。苟日新，日日新，又日新——商汤王把这句话刻在洗澡盆上，我看也可以刻在 IDE 上。</p>
+    </div>
+    <div class="reader-fin">完</div>
+    <nav class="reader-pn">
+      <a href="../ripple/"><span class="pn-label">上一篇</span><span class="pn-title">涟漪算法：两百行代码的一汪秋水</span></a>
+      <a href="../type-gymnastics/"><span class="pn-label">下一篇</span><span class="pn-title">类型体操，适可而止</span></a>
+    </nav>
+    <p class="arch-back"><a href="../../code/">← 返回编程卷</a></p>
+  </article>
+</main>
+
+<footer class="sub-footer">
+  <svg viewBox="0 0 96 96" width="40" height="40" role="img" aria-label="秋水居印章">
+      <g filter="url(#sealAge)">
+        <rect x="10" y="10" width="76" height="76" rx="4" fill="#b03a24"/>
+        <text x="48" y="69" text-anchor="middle" font-size="54" font-weight="900"
+              fill="#f2eee1" font-family="'Noto Serif SC','Songti SC',serif">秋</text>
+      </g>
+      <rect x="10" y="10" width="76" height="76" fill="#f2eee1" opacity="0.35"
+            filter="url(#sealMottle)" style="mix-blend-mode:screen"/>
+    </svg>
+  <span class="footer-copy">© 2019 – 2026 秋水居 · 以文会友，缓步当车</span>
+  <a class="back-home" href="../../">回到长卷 →</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>秋水居</title>
+    <link>/</link>
+    <description>写代码，读书，拍照，随手记 —— 一人的湖畔。</description>
+    <language>zh-CN</language>
+    <item>
+      <title>秋日琐记</title>
+      <link>/post/autumn-notes/</link>
+      <guid>/post/autumn-notes/</guid>
+      <pubDate>Sun, 11 Oct 2026 00:00:00 GMT</pubDate>
+      <description>桂花、糖炒栗子、加班后的夜风。秋天不解决问题，它只是把问题晒得金黄。</description>
+    </item>
+    <item>
+      <title>雨巷 · 石板路上的灯</title>
+      <link>/post/p-alley/</link>
+      <guid>/post/p-alley/</guid>
+      <pubDate>Sun, 05 Apr 2026 00:00:00 GMT</pubDate>
+      <description>雨刚停，灯笼刚亮，石板路把整条巷子复制了一遍。我拍的不是巷子，是巷子在水里的影子。</description>
+    </item>
+    <item>
+      <title>涟漪算法：两百行代码的一汪秋水</title>
+      <link>/post/ripple/</link>
+      <guid>/post/ripple/</guid>
+      <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+      <description>你此刻在这页首屏看到的水面，不是视频，不是贴图，而是两个数组互相推搡的结果。写一篇手记，记录它如何荡漾起来。</description>
+    </item>
+    <item>
+      <title>夜读《瓦尔登湖》</title>
+      <link>/post/walden/</link>
+      <guid>/post/walden/</guid>
+      <pubDate>Fri, 20 Feb 2026 00:00:00 GMT</pubDate>
+      <description>梭罗在湖边住了两年两个月，我在屏幕前坐了十年。他教我数一数，自己真正需要的东西到底有几样。</description>
+    </item>
+    <item>
+      <title>重构的勇气</title>
+      <link>/post/refactor-courage/</link>
+      <guid>/post/refactor-courage/</guid>
+      <pubDate>Wed, 28 Jan 2026 00:00:00 GMT</pubDate>
+      <description>面对一坨祖传的「面条」，谁都想掀桌重写。但真正的勇气不是推倒重来，而是在运行的系统上一寸一寸地把它理顺。</description>
+    </item>
+    <item>
+      <title>《漫长的余生》：小人物的墓志铭</title>
+      <link>/post/long-life/</link>
+      <guid>/post/long-life/</guid>
+      <pubDate>Sun, 14 Dec 2025 00:00:00 GMT</pubDate>
+      <description>一个北魏宫女的八十六年。正史里没有她，只有一块墓志——罗新老师用这块石头，打捞起整个时代。</description>
+    </item>
+    <item>
+      <title>类型体操，适可而止</title>
+      <link>/post/type-gymnastics/</link>
+      <guid>/post/type-gymnastics/</guid>
+      <pubDate>Sun, 09 Nov 2025 00:00:00 GMT</pubDate>
+      <description>类型系统是用来描述世界的，不是用来证明自己聪明的。当一段类型需要三张图才能讲清楚，它就已经错了。</description>
+    </item>
+    <item>
+      <title>残荷 · 留得残荷听雨声</title>
+      <link>/post/p-lotus/</link>
+      <guid>/post/p-lotus/</guid>
+      <pubDate>Sun, 26 Oct 2025 00:00:00 GMT</pubDate>
+      <description>李商隐说留得残荷听雨声。那天没有雨，只有雾，残荷站在水里，像一池沉静的标点。</description>
+    </item>
+    <item>
+      <title>蒹葭 · 白露为霜</title>
+      <link>/post/p-reeds/</link>
+      <guid>/post/p-reeds/</guid>
+      <pubDate>Sun, 19 Oct 2025 00:00:00 GMT</pubDate>
+      <description>太阳落下去之前的十分钟，芦苇通体发光。所谓伊人，在水一方——我举着相机，站在此岸。</description>
+    </item>
+    <item>
+      <title>重读《唐诗三百首》</title>
+      <link>/post/tang-poems/</link>
+      <guid>/post/tang-poems/</guid>
+      <pubDate>Fri, 03 Oct 2025 00:00:00 GMT</pubDate>
+      <description>小时候是背诵，长大后才是阅读。同一个「月」字，三十岁再读，已经是不一样的月光。</description>
+    </item>
+    <item>
+      <title>一次慢查询的解剖</title>
+      <link>/post/slow-query/</link>
+      <guid>/post/slow-query/</guid>
+      <pubDate>Wed, 17 Sep 2025 00:00:00 GMT</pubDate>
+      <description>一条 4.2 秒的 SQL，三张表，两个索引，一个隐藏的类型转换。庖丁解牛，从 EXPLAIN 下刀。</description>
+    </item>
+    <item>
+      <title>《程序员修炼之道》十年后再读</title>
+      <link>/post/pragmatic/</link>
+      <guid>/post/pragmatic/</guid>
+      <pubDate>Fri, 22 Aug 2025 00:00:00 GMT</pubDate>
+      <description>DRY、破窗、曳光弹。十年前当口诀背，十年后才懂，这本书讲的不是编程，是职业人格。</description>
+    </item>
+    <item>
+      <title>搬家记</title>
+      <link>/post/moving/</link>
+      <guid>/post/moving/</guid>
+      <pubDate>Sat, 19 Jul 2025 00:00:00 GMT</pubDate>
+      <description>三十一箱书，两只锅，一台旧相机。搬家公司师傅说：你这一看就是文化人——书是真沉。</description>
+    </item>
+    <item>
+      <title>无用之用</title>
+      <link>/post/useless/</link>
+      <guid>/post/useless/</guid>
+      <pubDate>Fri, 30 May 2025 00:00:00 GMT</pubDate>
+      <description>庄子说，人皆知有用之用，而莫知无用之用也。写字、拍照、发一下午呆——这些事养活不了我，却负责让我是我。</description>
+    </item>
+    <item>
+      <title>巷口的面馆</title>
+      <link>/post/noodle-shop/</link>
+      <guid>/post/noodle-shop/</guid>
+      <pubDate>Sat, 08 Mar 2025 00:00:00 GMT</pubDate>
+      <description>一碗阳春面，七块钱。老板娘记得每个熟客的口味，这是这条巷子里最精准的推荐算法。</description>
+    </item>
+    <item>
+      <title>孤舟</title>
+      <link>/post/p-boat/</link>
+      <guid>/post/p-boat/</guid>
+      <pubDate>Sat, 02 Nov 2024 00:00:00 GMT</pubDate>
+      <description>五点半的湖面，雾还没醒。一条小船从雾里出来，又回雾里去，像一句没有说完的话。</description>
+    </item>
+    <item>
+      <title>山涧</title>
+      <link>/post/p-stream/</link>
+      <guid>/post/p-stream/</guid>
+      <pubDate>Sun, 13 Oct 2024 00:00:00 GMT</pubDate>
+      <description>快门两秒，溪水就成了绢。石头上的落叶不动，水从它们身边流过去，一年又一年。</description>
+    </item>
+  </channel>
+</rss>

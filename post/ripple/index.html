@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>涟漪算法：两百行代码的一汪秋水 · 秋水居</title>
+<meta name="description" content="你此刻在这页首屏看到的水面，不是视频，不是贴图，而是两个数组互相推搡的结果。写一篇手记，记录它如何荡漾起来。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="alternate" type="application/rss+xml" title="秋水居" href="../../feed.xml">
+
+</head>
+<body class="sub-page">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="sealAge" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3" seed="7" result="warp"/>
+      <feDisplacementMap in="SourceGraphic" in2="warp" scale="5.5"/>
+    </filter>
+    <filter id="sealMottle" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="t"/>
+      <feColorMatrix in="t" type="matrix"
+        values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.4 0 0 0 -0.25" result="a"/>
+      <feComposite in="SourceGraphic" in2="a" operator="in"/>
+    </filter>
+  </defs>
+</svg>
+
+<header class="sub-topbar">
+  <a class="topbar-brand" href="../../"><svg viewBox="0 0 96 96" width="26" height="26" role="img" aria-label="秋水居印章">
+      <g filter="url(#sealAge)">
+        <rect x="10" y="10" width="76" height="76" rx="4" fill="#b03a24"/>
+        <text x="48" y="69" text-anchor="middle" font-size="54" font-weight="900"
+              fill="#f2eee1" font-family="'Noto Serif SC','Songti SC',serif">秋</text>
+      </g>
+      <rect x="10" y="10" width="76" height="76" fill="#f2eee1" opacity="0.35"
+            filter="url(#sealMottle)" style="mix-blend-mode:screen"/>
+    </svg>秋水居</a>
+  <nav class="topbar-nav">
+    <a href="../../code/">编程</a><a href="../../reading/">阅读</a><a href="../../photos/">摄影</a><a href="../../essays/">随笔</a><a href="../../archive/">归档</a><a href="../../#tools">工具</a>
+  </nav>
+</header>
+
+<main class="sub-main">
+
+  <article class="reader-article sub-article">
+    <p class="reader-cat">CODE · 编程</p>
+    <h1 class="reader-title">涟漪算法：两百行代码的一汪秋水</h1>
+    <div class="reader-meta">
+      <span>2026.03.12</span>
+      <span>算法 · Canvas</span>
+      <span>约 8 分钟</span>
+    </div>
+    
+    <div class="reader-body">
+      <p>一九九几年的时候，演示程序（demo scene）里流行一种水波纹效果：两个同样大小的缓冲区，一个读，一个写，每个像素的新值等于上下左右四个邻居的平均减去自己，再乘以一个略小于一的阻尼。如此往复，水面就活了。第一次读到这段算法时我愣了很久——它简单到近乎草率，却藏着波动方程的全部诗意。</p>
+      <p>这个博客首屏的那片秋水，就是这个老算法的变体。缓冲区故意开得很大，每个「水分子」管辖四五个真实像素，于是涟漪的边缘是钝的、化开的，像墨滴进宣纸，而不是弹珠落进玻璃缸。渲染时也不做法线贴图，只按高度的梯度去偏移采样坐标——光往低处折，影向高处让，一汪水便有了深浅。</p>
+      <p>写的过程中最有意思的是阻尼系数。零点九九五，涟漪传得远但容易振铃；零点九八，水面乖巧却死气沉沉。我调了一个晚上，最后定在零点九七三。你看，所谓手感，就是把一个无理数般的直觉，硬塞进一个小数点后三位的常数里。</p>
+      <p>有人问为什么不用 WebGL 写一个「正经」的流体模拟。纳维-斯托克斯方程当然好，但那是湖水，是物理的水；我要的是秋水，是记忆里的水——它只需要在鼠标划过时不紧不慢地荡一下，然后慢慢静下来，像什么都没发生过。</p>
+      <p>全部代码不到两百行，已开源在 GitHub。如果你也在某个深夜需要一个能让人平静下来的小效果，不妨试试这个三十年前的算法。老技术不死，它只是沉在水底，等着被一颗石子重新叫醒。</p>
+    </div>
+    <div class="reader-fin">完</div>
+    <nav class="reader-pn">
+      <a class="disabled"><span class="pn-label">上一篇</span><span class="pn-title">—— 已是卷首 ——</span></a>
+      <a href="../refactor-courage/"><span class="pn-label">下一篇</span><span class="pn-title">重构的勇气</span></a>
+    </nav>
+    <p class="arch-back"><a href="../../code/">← 返回编程卷</a></p>
+  </article>
+</main>
+
+<footer class="sub-footer">
+  <svg viewBox="0 0 96 96" width="40" height="40" role="img" aria-label="秋水居印章">
+      <g filter="url(#sealAge)">
+        <rect x="10" y="10" width="76" height="76" rx="4" fill="#b03a24"/>
+        <text x="48" y="69" text-anchor="middle" font-size="54" font-weight="900"
+              fill="#f2eee1" font-family="'Noto Serif SC','Songti SC',serif">秋</text>
+      </g>
+      <rect x="10" y="10" width="76" height="76" fill="#f2eee1" opacity="0.35"
+            filter="url(#sealMottle)" style="mix-blend-mode:screen"/>
+    </svg>
+  <span class="footer-copy">© 2019 – 2026 秋水居 · 以文会友，缓步当车</span>
+  <a class="back-home" href="../../">回到长卷 →</a>
+</footer>
+
+</body>
+</html>
