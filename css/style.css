@@ -712,7 +712,6 @@ main { padding-left: var(--rail-w); }
   .rail { display: none; }
   .topbar { display: flex; }
   main { padding-left: 0; }
-  .hero { padding-top: 3.5rem; }
   .hero-seal { top: 4.4rem; width: 56px; }
   .tool-row { grid-template-columns: 1fr 2.4rem; grid-template-rows: auto auto; }
   .tool-kind { display: none; }

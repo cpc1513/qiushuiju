@@ -213,8 +213,12 @@
 
   /* ---------- 尺寸 ---------- */
   function resize() {
-    W = hero.clientWidth;
-    H = hero.clientHeight;
+    // 用 canvas 元素实际被布局的尺寸（inset:0 铺满 hero），
+    // 而非 hero.clientWidth —— 移动端 hero 有 padding 时 clientWidth 不含 padding，
+    // 会导致 canvas 物理像素算小、四周露出纸底。
+    const rect = canvas.getBoundingClientRect();
+    W = Math.max(1, Math.round(rect.width));
+    H = Math.max(1, Math.round(rect.height));
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
