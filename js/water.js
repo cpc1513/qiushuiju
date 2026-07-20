@@ -126,12 +126,16 @@
   /* ---------- 渲染：按水面梯度折射背景 ---------- */
   function render() {
     const src = bgData.data, out = outImg.data;
-    for (let j = 1; j < SH - 1; j++) {
+    for (let j = 0; j < SH; j++) {
+      const jm = j === 0 ? 1 : (j === SH - 1 ? SH - 2 : j);   // 边界钳到内圈
       const row = j * SW;
-      for (let i = 1; i < SW - 1; i++) {
+      const rowm = jm * SW;
+      for (let i = 0; i < SW; i++) {
+        const im = i === 0 ? 1 : (i === SW - 1 ? SW - 2 : i);
         const idx = row + i;
-        const gx = buf1[idx - 1] - buf1[idx + 1];
-        const gy = buf1[idx - SW] - buf1[idx + SW];
+        const midx = rowm + im;
+        const gx = buf1[midx - 1] - buf1[midx + 1];
+        const gy = buf1[midx - SW] - buf1[midx + SW];
 
         let sx = i + Math.round(gx * 1.6);
         let sy = j + Math.round(gy * 1.6);
