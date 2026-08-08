@@ -53,10 +53,17 @@ function parseFM(text) {
 /* ---------------- 读取全部文章 ---------------- */
 function loadPosts() {
   const dir = path.join(ROOT, 'posts');
+  const skipped = [];
   const posts = fs.readdirSync(dir)
     .filter(f => f.endsWith('.md'))
     .map(f => {
-      const { meta, body } = parseFM(fs.readFileSync(path.join(dir, f), 'utf8'));
+      let meta, body;
+      try {
+        ({ meta, body } = parseFM(fs.readFileSync(path.join(dir, f), 'utf8')));
+      } catch (e) {
+        skipped.push(f);
+        return null;                       // 坏文件跳过，不拖垮整个构建
+      }
       const paras = body.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
       return {
         slug: meta.slug || f.replace(/\.md$/, ''),
@@ -68,11 +75,16 @@ function loadPosts() {
         img: meta.img || null,
         poem: meta.poem || null,
         season: meta.season || '秋',
-        excerpt: meta.excerpt || paras[0].slice(0, 90) + '……',
+        excerpt: meta.excerpt || (paras[0] ? paras[0].slice(0, 90) + '……' : ''),
         body: paras,
         year: (meta.date || '').slice(0, 4),
       };
-    });
+    })
+    .filter(Boolean);
+  if (skipped.length) {
+    console.warn('⚠ 以下文件缺少 front matter（--- 包裹的头几行），已跳过：');
+    skipped.forEach(f => console.warn('   - posts/' + f));
+  }
   posts.sort((a, b) => (a.date < b.date ? 1 : -1));
   return posts;
 }

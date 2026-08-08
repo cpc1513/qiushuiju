@@ -40,11 +40,12 @@ function renderList() {
   );
   ul.innerHTML = list.map(p => `
     <li data-slug="${p.slug}" class="${p.slug === currentSlug ? 'on' : ''}">
-      <div class="pl-title">${escapeHtml(p.title)}</div>
+      <div class="pl-title">${p.broken ? '⚠ ' : ''}${escapeHtml(p.title)}</div>
       <div class="pl-meta">
         <span class="pl-cat">${CAT_NAME[p.cat] || p.cat}</span>
         <span>${p.date}</span>
         <span>${p.words}字</span>
+        ${p.broken ? '<span style="color:#b23a24">缺头部信息</span>' : ''}
       </div>
     </li>`).join('');
   ul.querySelectorAll('li').forEach(li => {

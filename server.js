@@ -60,7 +60,9 @@ function buildFM(meta, body) {
 function listPosts() {
   if (!fs.existsSync(POSTS)) return [];
   return fs.readdirSync(POSTS).filter(f => f.endsWith('.md')).map(f => {
-    const { meta, body } = parseFM(fs.readFileSync(path.join(POSTS, f), 'utf8'));
+    const raw = fs.readFileSync(path.join(POSTS, f), 'utf8');
+    const hasFM = /^---\n[\s\S]*?\n---/.test(raw);
+    const { meta, body } = parseFM(raw);
     return {
       slug: meta.slug || f.replace(/\.md$/, ''),
       title: meta.title || f,
@@ -69,7 +71,8 @@ function listPosts() {
       tags: Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []),
       img: meta.img || '',
       excerpt: meta.excerpt || '',
-      words: body.replace(/\s/g, '').length,
+      words: (body || '').replace(/\s/g, '').length,
+      broken: !hasFM,                    // 缺 front matter，构建会跳过
     };
   }).sort((a, b) => (a.date < b.date ? 1 : -1));
 }
