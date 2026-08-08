@@ -4,7 +4,20 @@
 
 静态个人博客：宣纸 / 松烟墨 / 朱砂的文人水岸风格，首屏为可交互的秋水涟漪（Canvas 波动算法），Lenis 平滑滚动 + GSAP 滚动编排，摄影卷为横向画廊。内容由 Markdown 驱动，push 即自动构建并发布到 GitHub Pages。
 
-## 发一篇新文章
+## 编辑后台（推荐用法）
+
+不想手写 Markdown？用本地网页后台：
+
+```bash
+node server.js
+# 浏览器打开 http://localhost:3210
+```
+
+功能：写文章/改文章（带实时预览）、文章列表管理（按板块筛选、搜索）、上传摄影图片（自动压缩裁 3:2）、一键构建并发布（自动跑 build + git push）。
+
+> 注意：`server.js` 和 `admin/` 只是本地工具，不参与线上站点，可放心留在仓库。用后台的「构建并发布」前，请确保本地 git 已配好推送凭证。
+
+## 发一篇新文章（手动方式）
 
 1. 在 `posts/` 新建一个 `.md` 文件，文件名即文章 slug（建议小写英文加连字符）：
 
@@ -62,6 +75,8 @@ node build.js && python3 -m http.server 8000
 
 ```
 posts/            全部文章（Markdown，唯一内容源）
+server.js         本地编辑后台（node server.js，浏览器开 :3210）
+admin/            编辑后台前端
 build.js          构建脚本：md → content.js + 归档/板块/文章页 + RSS + sitemap
 index.html        首页（长卷）
 archive/          全部文字归档（构建产物）

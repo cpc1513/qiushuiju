@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>秋水居 · 编辑后台</title>
+<link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <span class="seal">秋</span>
+    <span class="brand-name">秋水居 · 编辑后台</span>
+  </div>
+  <div class="top-actions">
+    <span class="git-status" id="gitStatus" title="未提交的改动"></span>
+    <button class="btn btn-ghost" id="btnBuild">构建</button>
+    <button class="btn btn-primary" id="btnPublish">构建并发布</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- 左：文章列表 -->
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <input class="search" id="search" placeholder="搜索标题 / 标签…">
+      <button class="btn btn-new" id="btnNew">＋ 新文章</button>
+    </div>
+    <div class="filter" id="filter">
+      <button data-cat="" class="on">全部</button>
+      <button data-cat="code">编程</button>
+      <button data-cat="reading">阅读</button>
+      <button data-cat="photos">摄影</button>
+      <button data-cat="essays">随笔</button>
+    </div>
+    <ul class="post-list" id="postList"></ul>
+  </aside>
+
+  <!-- 右：编辑器 -->
+  <main class="editor" id="editor">
+    <div class="editor-empty" id="editorEmpty">
+      <p>选一篇左侧的文章开始编辑</p>
+      <p class="dim">或点「＋ 新文章」写一篇</p>
+    </div>
+
+    <div class="editor-body" id="editorBody" style="display:none">
+      <input class="f-title" id="fTitle" placeholder="文章标题">
+
+      <div class="meta-row">
+        <label>板块
+          <select id="fCat">
+            <option value="code">编程</option>
+            <option value="reading">阅读</option>
+            <option value="essays">随笔</option>
+            <option value="photos">摄影</option>
+          </select>
+        </label>
+        <label>日期 <input type="text" id="fDate" placeholder="2026.07.21"></label>
+        <label>slug <input type="text" id="fSlug" placeholder="my-post"></label>
+      </div>
+
+      <div class="meta-row">
+        <label class="grow">标签（逗号分隔）<input type="text" id="fTags" placeholder="标签一, 标签二"></label>
+      </div>
+      <div class="meta-row">
+        <label class="grow">摘要 <input type="text" id="fExcerpt" placeholder="一两句摘要（可留空，自动取首段）"></label>
+      </div>
+
+      <!-- 摄影专属 -->
+      <div class="photo-extra" id="photoExtra" style="display:none">
+        <div class="meta-row">
+          <label class="grow">诗句 <input type="text" id="fPoem" placeholder="一句图注诗"></label>
+          <label>季节
+            <select id="fSeason">
+              <option>春</option><option>夏</option><option selected>秋</option><option>冬</option>
+            </select>
+          </label>
+        </div>
+        <div class="img-pick">
+          <label class="grow">配图路径 <input type="text" id="fImg" placeholder="assets/photos/xxx.jpg"></label>
+          <button class="btn btn-ghost" id="btnUpload">上传图片</button>
+          <input type="file" id="fileInput" accept="image/*" style="display:none">
+        </div>
+        <div class="img-preview" id="imgPreview"></div>
+      </div>
+
+      <div class="editor-split">
+        <textarea class="f-body" id="fBody" placeholder="正文（Markdown，段落间空一行）"></textarea>
+        <div class="f-preview" id="fPreview"></div>
+      </div>
+
+      <div class="editor-foot">
+        <span class="word-count" id="wordCount"></span>
+        <div class="foot-actions">
+          <button class="btn btn-danger" id="btnDelete">删除</button>
+          <button class="btn btn-primary" id="btnSave">保存</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- 日志浮层 -->
+<div class="logmask" id="logmask" style="display:none">
+  <div class="logbox">
+    <div class="logbox-head">
+      <span id="logTitle">发布</span>
+      <button class="log-close" id="logClose">✕</button>
+    </div>
+    <pre class="logcontent" id="logcontent"></pre>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/admin.js"></script>
+</body>
+</html>
