@@ -65,6 +65,7 @@ function loadPosts() {
         return null;                       // 坏文件跳过，不拖垮整个构建
       }
       const paras = body.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+      const isDraft = meta.draft === 'true' || meta.draft === true;
       return {
         slug: meta.slug || f.replace(/\.md$/, ''),
         title: meta.title,
@@ -78,15 +79,32 @@ function loadPosts() {
         excerpt: meta.excerpt || (paras[0] ? paras[0].slice(0, 90) + '……' : ''),
         body: paras,
         year: (meta.date || '').slice(0, 4),
+        draft: isDraft,
       };
     })
-    .filter(Boolean);
+    .filter(p => p && !p.draft);          // 草稿不进线上
   if (skipped.length) {
     console.warn('⚠ 以下文件缺少 front matter（--- 包裹的头几行），已跳过：');
     skipped.forEach(f => console.warn('   - posts/' + f));
   }
   posts.sort((a, b) => (a.date < b.date ? 1 : -1));
   return posts;
+}
+
+/* 工具：优先读 admin/tools.json（后台可编辑），否则用内置默认 */
+function loadTools() {
+  const f = path.join(ROOT, 'admin', 'tools.json');
+  if (fs.existsSync(f)) {
+    try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { /* fallthrough */ }
+  }
+  return [
+    { name: 'Neovim',        kind: '编辑器', desc: '十年磨一剑的配置，最后删到只剩三十行。', url: 'https://neovim.io' },
+    { name: 'Obsidian',      kind: '笔  记', desc: '第二大脑不必宏大，能找到三年前的念头就好。', url: 'https://obsidian.md' },
+    { name: 'Raycast',       kind: '启动器', desc: '⌘ + Space 之后，万事皆可期。', url: 'https://www.raycast.com' },
+    { name: 'Fujifilm X100V',kind: '相  机', desc: '不能换镜头，于是学会了多走两步。', url: 'https://fujifilm-x.com' },
+    { name: 'LAMY 2000',     kind: '钢  笔', desc: '手写的字比敲出来的慢，也比敲出来的像自己。', url: 'https://www.lamy.com' },
+    { name: 'Hario V60',     kind: '手  冲', desc: '两分钟的等待，是早晨唯一的仪式。', url: 'https://hario.co.jp' },
+  ];
 }
 
 const POSTS = loadPosts();
@@ -122,6 +140,10 @@ ${bodyLines}
     return `  { post: '${p.slug}', img: '${p.img}', title: '${short}', poem: '${esc(poem)}', meta: '${cap}' },`;
   }).join('\n');
 
+  const tools = loadTools().map(t =>
+    `  { name: '${esc(t.name)}', kind: '${esc(t.kind || '')}', desc: '${esc(t.desc || '')}', url: '${esc(t.url || '')}' },`
+  ).join('\n');
+
   const out = `/* ============================================================
    秋水居 · 内容数据（由 build.js 依据 posts/*.md 生成，请勿手改）
    ============================================================ */
@@ -143,12 +165,7 @@ ${photos}
 
 /* 工具板块 */
 const TOOLS = [
-  { name: 'Neovim',        kind: '编辑器', desc: '十年磨一剑的配置，最后删到只剩三十行。', url: 'https://neovim.io' },
-  { name: 'Obsidian',      kind: '笔  记', desc: '第二大脑不必宏大，能找到三年前的念头就好。', url: 'https://obsidian.md' },
-  { name: 'Raycast',       kind: '启动器', desc: '⌘ + Space 之后，万事皆可期。', url: 'https://www.raycast.com' },
-  { name: 'Fujifilm X100V',kind: '相  机', desc: '不能换镜头，于是学会了多走两步。', url: 'https://fujifilm-x.com' },
-  { name: 'LAMY 2000',     kind: '钢  笔', desc: '手写的字比敲出来的慢，也比敲出来的像自己。', url: 'https://www.lamy.com' },
-  { name: 'Hario V60',     kind: '手  冲', desc: '两分钟的等待，是早晨唯一的仪式。', url: 'https://hario.co.jp' },
+${tools}
 ];
 `;
   fs.writeFileSync(path.join(ROOT, 'js/content.js'), out);

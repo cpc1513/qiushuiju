@@ -9,12 +9,9 @@
 <body>
 
 <header class="top">
-  <div class="brand">
-    <span class="seal">秋</span>
-    <span class="brand-name">秋水居 · 编辑后台</span>
-  </div>
+  <div class="brand"><span class="seal">秋</span><span class="brand-name">秋水居 · 编辑后台</span></div>
   <div class="top-actions">
-    <span class="git-status" id="gitStatus" title="未提交的改动"></span>
+    <span class="git-status" id="gitStatus"></span>
     <button class="btn btn-ghost" id="btnBuild">构建</button>
     <button class="btn btn-primary" id="btnPublish">构建并发布</button>
   </div>
@@ -22,68 +19,72 @@
 
 <div class="layout">
 
-  <!-- 左：文章列表 -->
+  <!-- 左：板块导航 -->
+  <nav class="sidenav">
+    <button class="nav-item on" data-cat=""><span class="n-num">全</span>全部</button>
+    <button class="nav-item" data-cat="code"><span class="n-num">壹</span>编程</button>
+    <button class="nav-item" data-cat="reading"><span class="n-num">贰</span>阅读</button>
+    <button class="nav-item" data-cat="photos"><span class="n-num">叁</span>摄影</button>
+    <button class="nav-item" data-cat="essays"><span class="n-num">肆</span>随笔</button>
+    <button class="nav-item" data-cat="tools"><span class="n-num">伍</span>工具</button>
+    <div class="nav-divider"></div>
+    <button class="nav-item" data-cat="draft"><span class="n-num">稿</span>草稿箱</button>
+    <button class="nav-item" data-cat="media"><span class="n-num">图</span>图片库</button>
+  </nav>
+
+  <!-- 中：列表 -->
   <aside class="sidebar">
     <div class="sidebar-head">
-      <input class="search" id="search" placeholder="搜索标题 / 标签…">
-      <button class="btn btn-new" id="btnNew">＋ 新文章</button>
-    </div>
-    <div class="filter" id="filter">
-      <button data-cat="" class="on">全部</button>
-      <button data-cat="code">编程</button>
-      <button data-cat="reading">阅读</button>
-      <button data-cat="photos">摄影</button>
-      <button data-cat="essays">随笔</button>
+      <input class="search" id="search" placeholder="搜索…">
+      <button class="btn btn-new" id="btnNew">＋ 新建</button>
     </div>
     <ul class="post-list" id="postList"></ul>
   </aside>
 
-  <!-- 右：编辑器 -->
+  <!-- 右：编辑区 -->
   <main class="editor" id="editor">
+
     <div class="editor-empty" id="editorEmpty">
-      <p>选一篇左侧的文章开始编辑</p>
-      <p class="dim">或点「＋ 新文章」写一篇</p>
+      <p>从中间选一条开始，或点「＋ 新建」</p>
     </div>
 
+    <!-- 文章编辑器 -->
     <div class="editor-body" id="editorBody" style="display:none">
-      <input class="f-title" id="fTitle" placeholder="文章标题">
+      <div class="ed-top">
+        <input class="f-title" id="fTitle" placeholder="标题">
+        <label class="draft-toggle"><input type="checkbox" id="fDraft"> 存为草稿（不上线）</label>
+      </div>
 
-      <div class="meta-row">
+      <div class="meta-grid">
         <label>板块
           <select id="fCat">
-            <option value="code">编程</option>
-            <option value="reading">阅读</option>
-            <option value="essays">随笔</option>
-            <option value="photos">摄影</option>
+            <option value="code">编程</option><option value="reading">阅读</option>
+            <option value="essays">随笔</option><option value="photos">摄影</option>
           </select>
         </label>
-        <label>日期 <input type="text" id="fDate" placeholder="2026.07.21"></label>
+        <label>日期 <input type="text" id="fDate"></label>
         <label>slug <input type="text" id="fSlug" placeholder="my-post"></label>
-      </div>
-
-      <div class="meta-row">
-        <label class="grow">标签（逗号分隔）<input type="text" id="fTags" placeholder="标签一, 标签二"></label>
-      </div>
-      <div class="meta-row">
-        <label class="grow">摘要 <input type="text" id="fExcerpt" placeholder="一两句摘要（可留空，自动取首段）"></label>
+        <label class="span2">标签（逗号分隔）<input type="text" id="fTags"></label>
+        <label class="span2">摘要 <input type="text" id="fExcerpt" placeholder="可留空，自动取首段"></label>
       </div>
 
       <!-- 摄影专属 -->
       <div class="photo-extra" id="photoExtra" style="display:none">
-        <div class="meta-row">
-          <label class="grow">诗句 <input type="text" id="fPoem" placeholder="一句图注诗"></label>
+        <div class="meta-grid">
+          <label class="span2">诗句 <input type="text" id="fPoem"></label>
           <label>季节
-            <select id="fSeason">
-              <option>春</option><option>夏</option><option selected>秋</option><option>冬</option>
-            </select>
+            <select id="fSeason"><option>春</option><option>夏</option><option selected>秋</option><option>冬</option></select>
           </label>
         </div>
-        <div class="img-pick">
-          <label class="grow">配图路径 <input type="text" id="fImg" placeholder="assets/photos/xxx.jpg"></label>
-          <button class="btn btn-ghost" id="btnUpload">上传图片</button>
-          <input type="file" id="fileInput" accept="image/*" style="display:none">
+        <div class="img-row">
+          <div class="img-box" id="imgPreview"><span class="img-none">暂无配图</span></div>
+          <div class="img-btns">
+            <button class="btn btn-ghost" id="btnUpload">上传图片</button>
+            <button class="btn btn-ghost" id="btnPickLib">从图片库选</button>
+            <input type="text" id="fImg" placeholder="assets/photos/xxx.jpg" class="img-path">
+            <input type="file" id="fileInput" accept="image/*" style="display:none">
+          </div>
         </div>
-        <div class="img-preview" id="imgPreview"></div>
       </div>
 
       <div class="editor-split">
@@ -99,16 +100,40 @@
         </div>
       </div>
     </div>
+
+    <!-- 工具编辑器 -->
+    <div class="editor-body" id="toolBody" style="display:none">
+      <div class="ed-top"><span class="tool-ed-title" id="toolEdTitle">编辑工具</span></div>
+      <div class="meta-grid">
+        <label>名称 <input type="text" id="tName"></label>
+        <label>类别 <input type="text" id="tKind" placeholder="编辑器 / 相机…"></label>
+        <label class="span2">链接 <input type="text" id="tUrl" placeholder="https://…"></label>
+        <label class="span2">一句话 <input type="text" id="tDesc"></label>
+      </div>
+      <div class="editor-foot">
+        <span></span>
+        <div class="foot-actions">
+          <button class="btn btn-danger" id="btnToolDelete">删除</button>
+          <button class="btn btn-primary" id="btnToolSave">保存</button>
+        </div>
+      </div>
+    </div>
+
   </main>
+</div>
+
+<!-- 图片库浮层 -->
+<div class="logmask" id="mediaMask" style="display:none">
+  <div class="mediabox">
+    <div class="logbox-head"><span>图片库</span><button class="log-close" data-close="mediaMask">✕</button></div>
+    <div class="media-grid" id="mediaGrid"></div>
+  </div>
 </div>
 
 <!-- 日志浮层 -->
 <div class="logmask" id="logmask" style="display:none">
   <div class="logbox">
-    <div class="logbox-head">
-      <span id="logTitle">发布</span>
-      <button class="log-close" id="logClose">✕</button>
-    </div>
+    <div class="logbox-head"><span id="logTitle">发布</span><button class="log-close" data-close="logmask">✕</button></div>
     <pre class="logcontent" id="logcontent"></pre>
   </div>
 </div>
