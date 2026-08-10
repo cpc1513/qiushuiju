@@ -13,7 +13,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { renderBody } = require('./lib/markdown');
+const { renderBody, stripMd } = require('./lib/markdown');
 
 const ROOT = __dirname;
 const SITE = {
@@ -78,7 +78,7 @@ function loadPosts() {
         img: meta.img || null,
         poem: meta.poem || null,
         season: meta.season || '秋',
-        excerpt: meta.excerpt || (paras[0] ? paras[0].slice(0, 90) + '……' : ''),
+        excerpt: meta.excerpt || (paras[0] ? (stripMd(paras[0]) || paras[0]).slice(0, 90) + '……' : ''),
         body: paras,
         year: (meta.date || '').slice(0, 4),
         draft: isDraft,
@@ -125,6 +125,8 @@ function buildContentJS() {
   const postsObj = POSTS.map(p => {
     const imgLine = p.img ? `\n    img: '${p.img}',` : '';
     const bodyLines = p.body.map(t => `      '${esc(t)}',`).join('\n');
+    // 首页浮层阅读器用的预渲染正文（根路径，图片无需前缀）；压成单行便于字符串字面量
+    const bodyHtml = esc(renderBody(p.body, '').replace(/\n */g, ''));
     return `  '${p.slug}': {
     cat: '${CATS[p.cat].cn}', catEn: '${CATS[p.cat].en}', title: '${esc(p.title)}',${imgLine}
     date: '${p.date}', tags: [${p.tags.map(t => `'${esc(t)}'`).join(', ')}], mins: ${p.mins},
@@ -132,6 +134,7 @@ function buildContentJS() {
     body: [
 ${bodyLines}
     ],
+    bodyHtml: '${bodyHtml}',
   },`;
   }).join('\n\n');
 

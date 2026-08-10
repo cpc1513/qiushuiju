@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
-const { inline, blockToHtml, renderBody } = require('../lib/markdown');
+const { inline, blockToHtml, renderBody, stripMd } = require('../lib/markdown');
 
 test('inline: 转义优先，HTML 原样转义', () => {
   assert.strictEqual(inline('<b>x</b> & y'), '&lt;b&gt;x&lt;/b&gt; &amp; y');
@@ -59,4 +59,17 @@ test('blockToHtml: 空图注时省略空 figcaption', () => {
   assert.strictEqual(
     blockToHtml('![](assets/a.jpg)', '../../'),
     '<figure class="reader-fig"><img src="../../assets/a.jpg" alt=""></figure>');
+});
+
+test('stripMd: 剥离块级记号（标题 / 引用 / 整段插图 / 分割线）', () => {
+  assert.strictEqual(stripMd('## 第一节'), '第一节');
+  assert.strictEqual(stripMd('> 湖水很安静'), '湖水很安静');
+  assert.strictEqual(stripMd('![天池](assets/photos/tianchi.jpg)'), '天池');
+  assert.strictEqual(stripMd('---'), '');
+});
+
+test('stripMd: 剥离行内记号，保留纯文本', () => {
+  assert.strictEqual(
+    stripMd('见[秋水居](https://example.com)一文，**重**点与*轻*声'),
+    '见秋水居一文，重点与轻声');
 });

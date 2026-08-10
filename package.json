@@ -5,6 +5,7 @@
   "description": "秋水居 · 个人博客（静态站点）",
   "scripts": {
     "build": "node build.js",
+    "admin": "node server.js",
     "serve": "node build.js && python3 -m http.server 8000",
     "test": "node --test",
     "bundle:tiptap": "esbuild admin/vendor-src/tiptap-entry.js --bundle --minify --format=iife --global-name=TipTap --outfile=admin/vendor/tiptap.js"

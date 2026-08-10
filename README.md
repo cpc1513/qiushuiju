@@ -4,6 +4,14 @@
 
 静态个人博客：宣纸 / 松烟墨 / 朱砂的文人水岸风格，首屏为可交互的秋水涟漪（Canvas 波动算法），Lenis 平滑滚动 + GSAP 滚动编排，摄影卷为横向画廊。内容由 Markdown 驱动，push 即自动构建并发布到 GitHub Pages。
 
+## 编辑后台
+
+```bash
+npm run admin     # 或 node server.js → http://localhost:3210
+```
+
+本地写作后台：所见即所得编辑（支持文中链接 / 插图）、图库管理、工具清单、一键构建推送。仅本地工具，不参与线上。
+
 ## 发一篇新文章
 
 1. 在 `posts/` 新建一个 `.md` 文件，文件名即文章 slug（建议小写英文加连字符）：
@@ -49,6 +57,8 @@ npm run serve     # 构建 + 起本地服务于 :8000
 node build.js && python3 -m http.server 8000
 ```
 
+`npm test` 可跑正文 Markdown 渲染（`lib/markdown.js`）的单元测试。
+
 ## 首次部署
 
 1. 在 GitHub 新建仓库（如 `qiushuiju` 或 `用户名.github.io`）
@@ -63,6 +73,8 @@ node build.js && python3 -m http.server 8000
 ```
 posts/            全部文章（Markdown，唯一内容源）
 build.js          构建脚本：md → content.js + 归档/板块/文章页 + RSS + sitemap
+server.js         本地编辑后台服务（仅本地，不部署）
+admin/            编辑后台前端（编辑器 / 图库 / 工具清单 / 发布）
 index.html        首页（长卷）
 archive/          全部文字归档（构建产物）
 code|reading|essays|photos/   板块页（构建产物）

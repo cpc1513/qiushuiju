@@ -453,7 +453,7 @@
       </div>
       ${imgBlock}
       <div class="reader-body">
-        ${p.body.map(t => `<p>${t}</p>`).join('')}
+        ${p.bodyHtml ? p.bodyHtml : p.body.map(t => `<p>${t}</p>`).join('')}
       </div>
       <div class="reader-fin">完</div>`;
 

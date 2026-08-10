@@ -287,7 +287,8 @@ function collectMeta() {
     tags: $('#m-tags').value.split(/[,，]/).map(s => s.trim()).filter(Boolean),
     excerpt: $('#m-excerpt').value.trim(),
   };
-  if ($('#m-draft').value) meta.draft = 'true';
+  // draft 始终提交：取消勾选时交空串，buildFM 跳过空值即清除旧 draft
+  meta.draft = $('#m-draft').value ? 'true' : '';
   if (cat === 'photos') {
     meta.img = $('#m-img').value.trim();
     meta.poem = $('#m-poem').value.trim();
