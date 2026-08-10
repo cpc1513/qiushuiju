@@ -42,3 +42,21 @@ test('renderBody: 多块拼接', () => {
   assert.ok(out.includes('<h2>标题</h2>'));
   assert.ok(out.includes('<figure'));
 });
+
+test('inline: URL 中的 & 保持转义产物', () => {
+  assert.strictEqual(
+    inline('[x](https://e.com/a?b=1&c=2)'),
+    '<a href="https://e.com/a?b=1&amp;c=2" target="_blank" rel="noopener">x</a>');
+});
+
+test('inline: URL 允许含平衡括号', () => {
+  assert.strictEqual(
+    inline('[w](https://zh.wikipedia.org/wiki/甲_(天干))'),
+    '<a href="https://zh.wikipedia.org/wiki/甲_(天干)" target="_blank" rel="noopener">w</a>');
+});
+
+test('blockToHtml: 空图注时省略空 figcaption', () => {
+  assert.strictEqual(
+    blockToHtml('![](assets/a.jpg)', '../../'),
+    '<figure class="reader-fig"><img src="../../assets/a.jpg" alt=""></figure>');
+});
