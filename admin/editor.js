@@ -204,6 +204,7 @@ const EditorKit = (() => {
       editor,
       getMarkdown: () => MdConvert.jsonToMd(editor.getJSON()),
       closePopovers,
+      destroy: () => editor.destroy(),
     };
   }
 

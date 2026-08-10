@@ -98,8 +98,8 @@ function switchView(name) {
   if (!guardDirty()) return;
   state.view = name;
   state.current = null;
-  state.kit = null;
-  setDirtyFalseSafe();
+  if (state.kit) { state.kit.destroy(); state.kit = null; }
+  setDirty(false);
   $$('#side button').forEach(b => b.classList.toggle('on', b.dataset.view === name));
   $('#list-panel').innerHTML = '';
   $('#list-panel').style.display = VIEWS[name].list ? '' : 'none';
@@ -108,14 +108,13 @@ function switchView(name) {
   VIEWS[name].main();
 }
 
-function setDirtyFalseSafe() { state.dirty = false; }
-
 /* ---------- 仪表盘 ---------- */
 async function renderDashboard() {
   const w = $('#workspace');
   w.innerHTML = '<h2 class="view-title">仪表盘</h2><p class="muted">加载中…</p>';
   try {
     const [stats, { posts }] = await Promise.all([api('/api/stats'), api('/api/posts')]);
+    if (state.view !== 'dashboard') return;
     state.posts = posts;
     const recent = posts.slice(0, 5);
     w.innerHTML = `
@@ -142,6 +141,7 @@ async function renderDashboard() {
     $('#dash-new').addEventListener('click', () => { switchView('posts'); newPost(); });
     $('#dash-publish').addEventListener('click', () => switchView('publish'));
   } catch (e) {
+    if (state.view !== 'dashboard') return;
     w.innerHTML = `<h2 class="view-title">仪表盘</h2><p class="muted">加载失败：${esc(e.message)}</p>`;
   }
 }
@@ -164,7 +164,15 @@ async function renderPostList() {
   $('#post-new').addEventListener('click', newPost);
   $('#post-search').addEventListener('input', paintPostItems);
   $('#post-cat').addEventListener('change', paintPostItems);
-  const { posts } = await api('/api/posts');
+  let posts;
+  try {
+    ({ posts } = await api('/api/posts'));
+  } catch (e) {
+    if (state.view !== 'posts') return;
+    $('#post-items').innerHTML = `<p class="muted">加载失败：${esc(e.message)}</p>`;
+    return;
+  }
+  if (state.view !== 'posts') return;
   state.posts = posts;
   paintPostItems();
 }
@@ -177,7 +185,7 @@ function paintPostItems() {
   $('#post-items').innerHTML = items.map(p => `
     <div class="post-item ${state.current && state.current.slug === p.slug ? 'on' : ''}" data-slug="${esc(p.slug)}">
       <div class="t">${esc(p.title)}</div>
-      <div class="m">${esc(p.date)} · ${CATS[p.cat] || p.cat} · ${p.words}字 ${p.draft ? '<span class="draft-tag">[草稿]</span>' : ''}</div>
+      <div class="m">${esc(p.date)} · ${esc(CATS[p.cat] || p.cat)} · ${p.words}字 ${p.draft ? '<span class="draft-tag">[草稿]</span>' : ''}</div>
     </div>`).join('') || '<p class="muted">没有匹配的文章。</p>';
   $$('#post-items .post-item').forEach(el =>
     el.addEventListener('click', () => openPost(el.dataset.slug)));
@@ -207,6 +215,7 @@ async function openPost(slug) {
 }
 
 function openEditor(post) {
+  if (state.kit) { state.kit.destroy(); state.kit = null; }
   state.current = post;
   const m = post.meta;
   const isPhoto = m.cat === 'photos';
@@ -289,6 +298,9 @@ function collectMeta() {
 
 async function saveCurrent() {
   const slug = $('#m-slug').value.trim();
+  const saveBtn = $('#ed-save');
+  if (saveBtn) saveBtn.disabled = true;
+  const wasNew = state.current && !state.current.slug;
   try {
     await api('/api/save', 'POST', {
       slug,
@@ -296,14 +308,19 @@ async function saveCurrent() {
       meta: collectMeta(),
       body: state.kit.getMarkdown(),
     });
+    if (!state.current) return;
     state.current.slug = slug;
     setDirty(false);
     toast('已保存 posts/' + slug + '.md');
     const { posts } = await api('/api/posts');
     state.posts = posts;
     if ($('#post-items')) paintPostItems();
+    // 新建文章首次保存后重新打开，让删除按钮出现（dirty 已是 false，guardDirty 放行）
+    if (wasNew && state.current) openPost(slug);
   } catch (e) {
     toast('保存失败：' + e.message, true);
+  } finally {
+    if (saveBtn) saveBtn.disabled = false;
   }
 }
 
@@ -313,8 +330,8 @@ async function deleteCurrent() {
     await api('/api/delete', 'POST', { slug: state.current.slug });
     toast('已删除');
     state.current = null;
-    state.kit = null;
-    setDirtyFalseSafe();
+    if (state.kit) { state.kit.destroy(); state.kit = null; }
+    setDirty(false);
     const { posts } = await api('/api/posts');
     state.posts = posts;
     paintPostItems();
@@ -345,7 +362,15 @@ async function renderGallery() {
     }
     renderGallery();
   });
-  const { photos } = await api('/api/photos');
+  let photos;
+  try {
+    ({ photos } = await api('/api/photos'));
+  } catch (e) {
+    if (state.view !== 'gallery') return;
+    $('#gallery-grid').innerHTML = `<p class="muted">加载失败：${esc(e.message)}</p>`;
+    return;
+  }
+  if (state.view !== 'gallery') return;
   $('#gallery-grid').innerHTML = photos.map(n => `
     <div class="gallery-card">
       <img src="/photos/${encodeURIComponent(n)}" data-path="assets/photos/${esc(n)}" alt="${esc(n)}">
@@ -372,7 +397,15 @@ async function renderGallery() {
 async function renderTools() {
   const w = $('#workspace');
   w.innerHTML = '<h2 class="view-title">工具清单</h2><p class="muted">加载中…</p>';
-  const { tools } = await api('/api/tools');
+  let tools;
+  try {
+    ({ tools } = await api('/api/tools'));
+  } catch (e) {
+    if (state.view !== 'tools') return;
+    w.innerHTML = `<h2 class="view-title">工具清单</h2><p class="muted">加载失败：${esc(e.message)}</p>`;
+    return;
+  }
+  if (state.view !== 'tools') return;
   w.innerHTML = `
     <h2 class="view-title">工具清单</h2>
     <p class="muted">首页「案头」栏目内容，保存后需重新构建生效。</p>

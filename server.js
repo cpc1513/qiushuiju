@@ -159,7 +159,20 @@ const server = http.createServer(async (req, res) => {
       if (!isValidSlug(slug) || (oldSlug && !isValidSlug(oldSlug))) {
         return json(res, { error: 'slug 只能用小写英文、数字、连字符' }, 400);
       }
-      savePost(slug, meta, content, oldSlug);
+      // 合并已有 front matter：以旧键序为骨架，提交的键优先（含空值），
+      // 已存在但未提交的键（如 mins）原样保留，新增键追加在后
+      const existing = readPost(oldSlug || slug);
+      let merged = meta;
+      if (existing) {
+        merged = {};
+        for (const [k, v] of Object.entries(existing.meta)) {
+          merged[k] = k in meta ? meta[k] : v;
+        }
+        for (const [k, v] of Object.entries(meta)) {
+          if (!(k in merged)) merged[k] = v;
+        }
+      }
+      savePost(slug, merged, content, oldSlug);
       return json(res, { ok: true });
     }
 
