@@ -6,53 +6,18 @@
     <description>写代码，读书，拍照，随手记 —— 一人的湖畔。</description>
     <language>zh-CN</language>
     <item>
+      <title>文字炼金坊</title>
+      <link>/post/webapp/</link>
+      <guid>/post/webapp/</guid>
+      <pubDate>Mon, 10 Aug 2026 00:00:00 GMT</pubDate>
+      <description>AI 写作风格转换工具：把任意文字「炼」成名家文风。</description>
+    </item>
+    <item>
       <title>外滩 · 蓝调时刻</title>
       <link>/post/p-bund/</link>
       <guid>/post/p-bund/</guid>
       <pubDate>Sun, 14 Jun 2026 00:00:00 GMT</pubDate>
       <description>太阳刚落，天还没全黑。海关大楼的灯一盏盏亮起来，把一百年的石头照得温热。</description>
-    </item>
-    <item>
-      <title>Neovim</title>
-      <link>/post/t-neovim/</link>
-      <guid>/post/t-neovim/</guid>
-      <pubDate>Tue, 06 Jan 2026 00:00:00 GMT</pubDate>
-      <description>十年磨一剑的配置，最后删到只剩三十行。</description>
-    </item>
-    <item>
-      <title>Obsidian</title>
-      <link>/post/t-obsidian/</link>
-      <guid>/post/t-obsidian/</guid>
-      <pubDate>Mon, 05 Jan 2026 00:00:00 GMT</pubDate>
-      <description>第二大脑不必宏大，能找到三年前的念头就好。</description>
-    </item>
-    <item>
-      <title>Raycast</title>
-      <link>/post/t-raycast/</link>
-      <guid>/post/t-raycast/</guid>
-      <pubDate>Sun, 04 Jan 2026 00:00:00 GMT</pubDate>
-      <description>⌘ + Space 之后，万事皆可期。</description>
-    </item>
-    <item>
-      <title>Fujifilm X100V</title>
-      <link>/post/t-x100v/</link>
-      <guid>/post/t-x100v/</guid>
-      <pubDate>Sat, 03 Jan 2026 00:00:00 GMT</pubDate>
-      <description>不能换镜头，于是学会了多走两步。</description>
-    </item>
-    <item>
-      <title>LAMY 2000</title>
-      <link>/post/t-lamy-2000/</link>
-      <guid>/post/t-lamy-2000/</guid>
-      <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
-      <description>手写的字比敲出来的慢，也比敲出来的像自己。</description>
-    </item>
-    <item>
-      <title>Hario V60</title>
-      <link>/post/t-v60/</link>
-      <guid>/post/t-v60/</guid>
-      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
-      <description>两分钟的等待，是早晨唯一的仪式。</description>
     </item>
     <item>
       <title>陆家嘴 · 天际线</title>

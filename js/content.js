@@ -12,6 +12,21 @@ const CHAPTERS = [
 
 const POSTS = {
 
+  'webapp': {
+    cat: '编程', catEn: 'CODE', title: '文字炼金坊',
+    date: '2026.08.10', tags: [], mins: 2,
+    excerpt: 'AI 写作风格转换工具：把任意文字「炼」成名家文风。',
+    body: [
+      '**67 位作家 × 4 种转换模式**：选择作家与模式，一键改写你的文字；',
+      '**自定义文风提取**：粘贴一段范文，提取其风格特征用于转换；',
+      '**多轮续写**：在转换结果基础上持续对话、迭代打磨；',
+      '**多作家对比**：同一段文字同时用多位作家的风格转换，并排比较。',
+      '[https://cpc1513.github.io/literature-Alchemy-Workshop/](https://cpc1513.github.io/literature-Alchemy-Workshop/)',
+      '**技术栈**：前端 React 19 + Vite + TypeScript + Tailwind CSS + shadcn/ui，部署在 GitHub Pages；后端是 Hono + tRPC 的轻量代理，负责保管 DeepSeek API Key 并转发请求。前后端通过 tRPC 实现端到端类型安全，共享 contracts/ 目录中的作家数据与 prompt 构建逻辑。无数据库——密钥存于Netlify平台环境变量，接口由 Cloudflare Turnstile 人机验证、访问口令与 IP 限频保护。',
+    ],
+    bodyHtml: '<p><strong>67 位作家 × 4 种转换模式</strong>：选择作家与模式，一键改写你的文字；</p><p><strong>自定义文风提取</strong>：粘贴一段范文，提取其风格特征用于转换；</p><p><strong>多轮续写</strong>：在转换结果基础上持续对话、迭代打磨；</p><p><strong>多作家对比</strong>：同一段文字同时用多位作家的风格转换，并排比较。</p><p><a href="https://cpc1513.github.io/literature-Alchemy-Workshop/" target="_blank" rel="noopener">https://cpc1513.github.io/literature-Alchemy-Workshop/</a></p><p><strong>技术栈</strong>：前端 React 19 + Vite + TypeScript + Tailwind CSS + shadcn/ui，部署在 GitHub Pages；后端是 Hono + tRPC 的轻量代理，负责保管 DeepSeek API Key 并转发请求。前后端通过 tRPC 实现端到端类型安全，共享 contracts/ 目录中的作家数据与 prompt 构建逻辑。无数据库——密钥存于Netlify平台环境变量，接口由 Cloudflare Turnstile 人机验证、访问口令与 IP 限频保护。</p>',
+  },
+
   'p-bund': {
     cat: '摄影', catEn: 'PHOTOS', title: '外滩 · 蓝调时刻',
     img: 'assets/photos/bund.jpg',
@@ -61,10 +76,5 @@ const PHOTOS = [
 
 /* 工具板块 */
 const TOOLS = [
-  { name: 'Neovim', kind: '编辑器', desc: '十年磨一剑的配置，最后删到只剩三十行。', url: 'https://neovim.io' },
-  { name: 'Obsidian', kind: '笔  记', desc: '第二大脑不必宏大，能找到三年前的念头就好。', url: 'https://obsidian.md' },
-  { name: 'Raycast', kind: '启动器', desc: '⌘ + Space 之后，万事皆可期。', url: 'https://www.raycast.com' },
-  { name: 'Fujifilm X100V', kind: '相  机', desc: '不能换镜头，于是学会了多走两步。', url: 'https://fujifilm-x.com' },
-  { name: 'LAMY 2000', kind: '钢  笔', desc: '手写的字比敲出来的慢，也比敲出来的像自己。', url: 'https://www.lamy.com' },
-  { name: 'Hario V60', kind: '手  冲', desc: '两分钟的等待，是早晨唯一的仪式。', url: 'https://hario.co.jp' },
+
 ];
