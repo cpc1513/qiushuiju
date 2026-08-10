@@ -4,7 +4,20 @@
 
 const EditorKit = (() => {
 
+  /* ---------- 模块级共享：转义 + 浮层根 + 全局关闭监听（只挂一次） ---------- */
+  const esc = (s) => String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+  const popRoot = document.getElementById('popover-root');
+  function closePopovers() { popRoot.innerHTML = ''; }
+  document.addEventListener('mousedown', (e) => {
+    if (!e.target.closest('.popover') && !e.target.closest('.ed-toolbar')) closePopovers();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopovers(); });
+
   function create(opts) {
+    opts.toolbar.innerHTML = ''; // 防御性清空，重复 create 幂等
     const editor = new TipTap.Editor({
       element: opts.mount,
       extensions: [
@@ -81,9 +94,7 @@ const EditorKit = (() => {
       refreshToolbar();
     }
 
-    /* ---------- 浮层基础设施 ---------- */
-    const popRoot = document.getElementById('popover-root');
-    function closePopovers() { popRoot.innerHTML = ''; }
+    /* ---------- 浮层基础设施（popRoot/closePopovers/全局监听在模块级，只挂一次） ---------- */
     function openPopover(anchorBtn, build) {
       closePopovers();
       const pop = document.createElement('div');
@@ -96,17 +107,13 @@ const EditorKit = (() => {
       const input = pop.querySelector('input');
       if (input) input.focus();
     }
-    document.addEventListener('mousedown', (e) => {
-      if (!e.target.closest('.popover') && !e.target.closest('.ed-toolbar')) closePopovers();
-    });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopovers(); });
 
     /* ---------- 链接浮层 ---------- */
     function showLinkPopover(btn) {
       const cur = editor.isActive('link') ? (editor.getAttributes('link').href || '') : '';
       openPopover(btn, (pop) => {
         pop.innerHTML = `
-          <input type="url" placeholder="https://…" value="${cur.replace(/"/g, '&quot;')}">
+          <input type="url" placeholder="https://…" value="${esc(cur)}">
           <div class="row">
             ${cur ? '<button class="btn danger" data-act="remove">移除</button>' : ''}
             <button class="btn" data-act="cancel">取消</button>
@@ -137,12 +144,21 @@ const EditorKit = (() => {
       const cur = editor.isActive('image') ? editor.getAttributes('image') : null;
       openPopover(btn, async (pop) => {
         pop.innerHTML = `<div class="muted" style="margin-bottom:8px">加载图库…</div>`;
-        const photos = await opts.loadPhotos();
+        let photos;
+        try {
+          photos = await opts.loadPhotos();
+        } catch (err) {
+          if (pop.isConnected) {
+            pop.innerHTML = `<div class="muted" style="margin-bottom:8px">图库加载失败：${esc(err.message)}</div>`;
+          }
+          return;
+        }
+        if (!pop.isConnected) return; // 等待期间浮层已被关闭
         pop.innerHTML = `
           <div class="pop-grid">
-            ${photos.map(n => `<img src="/photos/${encodeURIComponent(n)}" data-name="${n}" alt="">`).join('')}
+            ${photos.map(n => `<img src="/photos/${encodeURIComponent(n)}" data-name="${esc(n)}" alt="">`).join('')}
           </div>
-          <input type="text" placeholder="图注（可空）" value="${cur ? String(cur.alt || '').replace(/"/g, '&quot;') : ''}">
+          <input type="text" placeholder="图注（可空）" value="${cur ? esc(cur.alt || '') : ''}">
           <div class="row">
             <label class="btn" style="margin-right:auto">上传新图
               <input type="file" accept="image/jpeg,image/png" hidden>
