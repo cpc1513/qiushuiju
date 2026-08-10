@@ -361,7 +361,24 @@ function buildPostPages() {
   }
 }
 
-/* ---------------- 五 · RSS / Sitemap ---------------- */
+/* ---------------- 五 · 清理陈旧文章目录 ---------------- */
+/* 文章删除或设为草稿后，残留的 post/<slug>/ 旧产物一并清掉（只动一级子目录） */
+function cleanStalePostDirs() {
+  const dir = path.join(ROOT, 'post');
+  if (!fs.existsSync(dir)) return;
+  const live = new Set(POSTS.map(p => p.slug));
+  const stale = fs.readdirSync(dir, { withFileTypes: true })
+    .filter(e => e.isDirectory() && !live.has(e.name))
+    .map(e => e.name);
+  for (const name of stale) {
+    fs.rmSync(path.join(dir, name), { recursive: true });
+  }
+  if (stale.length) {
+    console.log('  · 清理陈旧文章目录 ' + stale.length + ' 个：' + stale.map(s => `post/${s}/`).join('、'));
+  }
+}
+
+/* ---------------- 六 · RSS / Sitemap ---------------- */
 function isoDate(d) {
   const [y, m, dd] = d.split('.');
   return `${y}-${m}-${dd}T08:00:00+08:00`;
@@ -411,5 +428,6 @@ const n = buildContentJS();
 buildArchive();
 buildCatPages();
 buildPostPages();
+cleanStalePostDirs();
 buildFeeds();
 console.log(`✓ 构建完成：${n} 篇文章 → content.js / archive / 4 板块页 / ${n} 文章页 / feed.xml / sitemap.xml`);

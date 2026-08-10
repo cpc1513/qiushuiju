@@ -1,8 +1,38 @@
 [
-  { "name": "Neovim", "kind": "编辑器", "desc": "十年磨一剑的配置，最后删到只剩三十行。", "url": "https://neovim.io" },
-  { "name": "Obsidian", "kind": "笔  记", "desc": "第二大脑不必宏大，能找到三年前的念头就好。", "url": "https://obsidian.md" },
-  { "name": "Raycast", "kind": "启动器", "desc": "⌘ + Space 之后，万事皆可期。", "url": "https://www.raycast.com" },
-  { "name": "Fujifilm X100V", "kind": "相  机", "desc": "不能换镜头，于是学会了多走两步。", "url": "https://fujifilm-x.com" },
-  { "name": "LAMY 2000", "kind": "钢  笔", "desc": "手写的字比敲出来的慢，也比敲出来的像自己。", "url": "https://www.lamy.com" },
-  { "name": "Hario V60", "kind": "手  冲", "desc": "两分钟的等待，是早晨唯一的仪式。", "url": "https://hario.co.jp" }
+  {
+    "name": "Neovim",
+    "kind": "编辑器",
+    "desc": "十年磨一剑的配置，最后删到只剩三十行。",
+    "url": "https://neovim.io"
+  },
+  {
+    "name": "Obsidian",
+    "kind": "笔  记",
+    "desc": "第二大脑不必宏大，能找到三年前的念头就好。",
+    "url": "https://obsidian.md"
+  },
+  {
+    "name": "Raycast",
+    "kind": "启动器",
+    "desc": "⌘ + Space 之后，万事皆可期。",
+    "url": "https://www.raycast.com"
+  },
+  {
+    "name": "Fujifilm X100V",
+    "kind": "相  机",
+    "desc": "不能换镜头，于是学会了多走两步。",
+    "url": "https://fujifilm-x.com"
+  },
+  {
+    "name": "LAMY 2000",
+    "kind": "钢  笔",
+    "desc": "手写的字比敲出来的慢，也比敲出来的像自己。",
+    "url": "https://www.lamy.com"
+  },
+  {
+    "name": "Hario V60",
+    "kind": "手  冲",
+    "desc": "两分钟的等待，是早晨唯一的仪式。",
+    "url": "https://hario.co.jp"
+  }
 ]
