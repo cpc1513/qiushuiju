@@ -89,7 +89,6 @@ const VIEWS = {
   dashboard: { list: null, main: renderDashboard },
   posts: { list: renderPostList, main: renderEditorWelcome },
   gallery: { list: null, main: renderGallery },
-  tools: { list: null, main: renderTools },
   publish: { list: null, main: renderPublish },
 };
 
@@ -160,8 +159,14 @@ async function renderPostList() {
       </select>
     </div>
     <button class="btn primary" id="post-new" style="width:100%;margin-bottom:10px">＋ 新文章</button>
-    <div id="post-items"><p class="muted">加载中…</p></div>`;
+    <div id="post-items"><p class="muted">加载中…</p></div>
+    <div class="list-sep"></div>
+    <div class="post-item tools-entry" id="tools-entry">
+      <div class="t">案头工具</div>
+      <div class="m">首页「案头」栏目清单</div>
+    </div>`;
   $('#post-new').addEventListener('click', newPost);
+  $('#tools-entry').addEventListener('click', openToolsView);
   $('#post-search').addEventListener('input', paintPostItems);
   $('#post-cat').addEventListener('change', paintPostItems);
   let posts;
@@ -189,6 +194,19 @@ function paintPostItems() {
     </div>`).join('') || '<p class="muted">没有匹配的文章。</p>';
   $$('#post-items .post-item').forEach(el =>
     el.addEventListener('click', () => openPost(el.dataset.slug)));
+  const te = $('#tools-entry');
+  if (te) te.classList.remove('on');
+}
+
+/* 案头工具是「文」的一种：入口挂在文章列表底部，编辑区共用工作区 */
+function openToolsView() {
+  if (!guardDirty()) return;
+  state.current = null;
+  if (state.kit) { state.kit.destroy(); state.kit = null; }
+  setDirty(false);
+  $$('#post-items .post-item').forEach(el => el.classList.remove('on'));
+  $('#tools-entry').classList.add('on');
+  renderTools();
 }
 
 function renderEditorWelcome() {
@@ -232,7 +250,12 @@ function openEditor(post) {
         <option value="">发布</option><option value="true" ${String(m.draft) === 'true' ? 'selected' : ''}>草稿</option>
       </select></div>
       <div class="field wide"><label>摘要</label><input id="m-excerpt" value="${esc(m.excerpt || '')}"></div>
-      <div class="field wide photo-only" style="display:${isPhoto ? '' : 'none'}"><label>配图路径（摄影文）</label><input id="m-img" value="${esc(m.img || '')}" placeholder="assets/photos/xxx.jpg"></div>
+      <div class="field wide photo-only" style="display:${isPhoto ? '' : 'none'}"><label>配图（摄影文 · 可拖拽图片到此处上传）</label>
+        <div class="img-drop" id="m-img-drop">
+          <input id="m-img" value="${esc(m.img || '')}" placeholder="assets/photos/xxx.jpg">
+          <div class="img-preview" id="m-img-preview"></div>
+        </div>
+      </div>
       <div class="field photo-only" style="display:${isPhoto ? '' : 'none'}"><label>图注诗</label><input id="m-poem" value="${esc(m.poem || '')}"></div>
       <div class="field photo-only" style="display:${isPhoto ? '' : 'none'}"><label>季节字</label><input id="m-season" value="${esc(m.season || '')}" placeholder="秋"></div>
     </div>
@@ -254,6 +277,37 @@ function openEditor(post) {
   });
   $$('.ed-meta input, .ed-meta select').forEach(el =>
     el.addEventListener('input', () => setDirty(true)));
+
+  /* 配图：预览 + 拖拽上传 */
+  const imgInput = $('#m-img');
+  const imgDrop = $('#m-img-drop');
+  const imgPreview = $('#m-img-preview');
+  function paintImgPreview() {
+    const v = imgInput.value.trim();
+    imgPreview.innerHTML = /^assets\/photos\/\S+\.(jpe?g|png)$/i.test(v)
+      ? `<img src="/${esc(v)}" alt="配图预览">` : '';
+  }
+  imgInput.addEventListener('input', paintImgPreview);
+  paintImgPreview();
+  imgDrop.addEventListener('dragover', (e) => { e.preventDefault(); imgDrop.classList.add('dragover'); });
+  imgDrop.addEventListener('dragleave', () => imgDrop.classList.remove('dragover'));
+  imgDrop.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    imgDrop.classList.remove('dragover');
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    imgDrop.classList.add('uploading');
+    try {
+      imgInput.value = await uploadPhoto(file, true);   // 摄影配图与图库同规：压缩 + 裁 3:2
+      paintImgPreview();
+      setDirty(true);
+      toast('配图已上传');
+    } catch (err) {
+      toast('上传失败：' + err.message, true);
+    } finally {
+      imgDrop.classList.remove('uploading');
+    }
+  });
 
   state.kit = EditorKit.create({
     mount: $('#ed-mount'),
@@ -402,11 +456,11 @@ async function renderTools() {
   try {
     ({ tools } = await api('/api/tools'));
   } catch (e) {
-    if (state.view !== 'tools') return;
+    if (state.view !== 'posts') return;
     w.innerHTML = `<h2 class="view-title">工具清单</h2><p class="muted">加载失败：${esc(e.message)}</p>`;
     return;
   }
-  if (state.view !== 'tools') return;
+  if (state.view !== 'posts') return;
   w.innerHTML = `
     <h2 class="view-title">工具清单</h2>
     <p class="muted">首页「案头」栏目内容，保存后需重新构建生效。</p>

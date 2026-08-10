@@ -174,3 +174,18 @@ h2.view-title { font-family: var(--serif); font-size: 22px; margin: 0 0 16px; }
 .step-line { margin: 6px 0; font-size: 13px; }
 .step-line.ok::before { content: '✓ '; color: #7a9a6d; }
 .step-line.fail::before { content: '✗ '; color: var(--cinnabar); font-weight: 700; }
+
+/* ---- 文列表：案头工具入口分隔 ---- */
+.list-sep { border-top: 1px solid var(--line); margin: 10px 0 6px; }
+
+/* ---- 配图拖拽上传 ---- */
+.img-drop { position: relative; }
+.img-drop.dragover input { border-color: var(--cinnabar); background: #f3e9d2; }
+.img-drop.uploading::after {
+  content: '上传中…'; position: absolute; right: 10px; top: 8px;
+  font-size: 12px; color: var(--cinnabar);
+}
+.img-preview img {
+  margin-top: 8px; max-width: 260px; display: block;
+  border: 1px solid var(--line); border-radius: 6px;
+}
