@@ -18,6 +18,10 @@ const ADMIN = path.join(ROOT, 'admin');
 const TOOLS_FILE = path.join(ADMIN, 'tools.json');
 const PORT = 3210;
 
+const SLUG_RE = /^[a-z0-9-]+$/;
+const isValidSlug = s => typeof s === 'string' && SLUG_RE.test(s);
+const MAX_BODY = 20 * 1024 * 1024;   // 请求体上限 20MB
+
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8',
@@ -26,7 +30,7 @@ const MIME = {
 
 /* ---------------- front matter ---------------- */
 function parseFM(text) {
-  text = text.replace(/^﻿/, '').replace(/\r\n/g, '\n');   // 兼容 BOM 与 CRLF
+  text = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');   // 兼容 BOM 与 CRLF
   const m = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
   if (!m) return { meta: {}, body: text };
   const meta = {};
@@ -36,7 +40,7 @@ function parseFM(text) {
     let [, k, v] = kv;
     v = v.trim();
     if (v.startsWith('[') && v.endsWith(']')) v = v.slice(1, -1).split(',').map(s => s.trim()).filter(Boolean);
-    else if (v.startsWith('"') && v.endsWith('"')) v = v.slice(1, -1);
+    else if (v.startsWith('"') && v.endsWith('"')) v = v.slice(1, -1).replace(/\\"/g, '"');
     meta[k] = v;
   }
   return { meta, body: m[2].trim() };
@@ -105,7 +109,15 @@ function writeTools(tools) {
 function readBody(req) {
   return new Promise((res, rej) => {
     const chunks = [];
-    req.on('data', c => chunks.push(c));
+    let size = 0;
+    req.on('data', c => {
+      size += c.length;
+      if (size > MAX_BODY) {
+        req.destroy();
+        return rej(new Error('请求体超过 20MB 上限'));
+      }
+      chunks.push(c);
+    });
     req.on('end', () => res(Buffer.concat(chunks)));
     req.on('error', rej);
   });
@@ -136,19 +148,24 @@ const server = http.createServer(async (req, res) => {
     if (p === '/api/posts' && req.method === 'GET') return json(res, { posts: listPosts() });
 
     if (p.startsWith('/api/post/') && req.method === 'GET') {
-      const post = readPost(decodeURIComponent(p.slice(10)));
+      const slug = decodeURIComponent(p.slice(10));
+      if (!isValidSlug(slug)) return json(res, { error: 'slug 只能用小写英文、数字、连字符' }, 400);
+      const post = readPost(slug);
       return post ? json(res, post) : json(res, { error: 'not found' }, 404);
     }
 
     if (p === '/api/save' && req.method === 'POST') {
       const { slug, oldSlug, meta, body: content } = JSON.parse((await readBody(req)).toString('utf8'));
-      if (!slug || !/^[a-z0-9-]+$/.test(slug)) return json(res, { error: 'slug 只能用小写英文、数字、连字符' }, 400);
+      if (!isValidSlug(slug) || (oldSlug && !isValidSlug(oldSlug))) {
+        return json(res, { error: 'slug 只能用小写英文、数字、连字符' }, 400);
+      }
       savePost(slug, meta, content, oldSlug);
       return json(res, { ok: true });
     }
 
     if (p === '/api/delete' && req.method === 'POST') {
       const { slug } = JSON.parse((await readBody(req)).toString('utf8'));
+      if (!isValidSlug(slug)) return json(res, { error: 'slug 只能用小写英文、数字、连字符' }, 400);
       deletePost(slug);
       return json(res, { ok: true });
     }
@@ -168,7 +185,9 @@ const server = http.createServer(async (req, res) => {
     }
     if (p === '/api/upload' && req.method === 'POST') {
       const { name, data } = JSON.parse((await readBody(req)).toString('utf8'));
-      const safe = name.replace(/[^\w.-]/g, '-').toLowerCase();
+      const safe = String(name || '').replace(/[^\w.-]/g, '-').toLowerCase();
+      if (!/\.(jpe?g|png)$/.test(safe)) return json(res, { error: '仅支持 .jpg/.jpeg/.png 图片' }, 400);
+      fs.mkdirSync(PHOTOS, { recursive: true });
       fs.writeFileSync(path.join(PHOTOS, safe), Buffer.from(data, 'base64'));
       return json(res, { ok: true, path: `assets/photos/${safe}` });
     }
@@ -206,8 +225,9 @@ const server = http.createServer(async (req, res) => {
       if (build.code !== 0) return json(res, { ok: false, steps });
       await run('git', ['add', '.']);
       const commit = await run('git', ['commit', '-m', message || `更新 ${new Date().toLocaleString('zh-CN')}`]);
-      steps.push({ name: '提交', ok: commit.code === 0, log: commit.out });
-      if (commit.code !== 0) return json(res, { ok: false, steps });
+      const noChange = commit.code !== 0 && commit.out.includes('nothing to commit');
+      steps.push({ name: '提交', ok: commit.code === 0 || noChange, log: commit.out });
+      if (commit.code !== 0 && !noChange) return json(res, { ok: false, steps });
       const push = await run('git', ['push']);
       steps.push({ name: '推送', ok: push.code === 0, log: push.out });
       return json(res, { ok: push.code === 0, steps });
@@ -237,6 +257,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '127.0.0.1', () => {
   console.log('\n  秋水居 · 编辑后台已启动\n  浏览器打开 →  http://localhost:' + PORT + '\n');
 });
