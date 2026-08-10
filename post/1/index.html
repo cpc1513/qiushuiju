@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meloday · 秋水居</title>
+<meta name="description" content="一款面向 Windows 的 AI 音乐日记应用">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="alternate" type="application/rss+xml" title="秋水居" href="../../feed.xml">
+
+</head>
+<body class="sub-page">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="sealAge" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3" seed="7" result="warp"/>
+      <feDisplacementMap in="SourceGraphic" in2="warp" scale="5.5"/>
+    </filter>
+    <filter id="sealMottle" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="t"/>
+      <feColorMatrix in="t" type="matrix"
+        values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.4 0 0 0 -0.25" result="a"/>
+      <feComposite in="SourceGraphic" in2="a" operator="in"/>
+    </filter>
+  </defs>
+</svg>
+
+<header class="sub-topbar">
+  <a class="topbar-brand" href="../../"><svg viewBox="0 0 96 96" width="26" height="26" role="img" aria-label="秋水居印章">
+      <g filter="url(#sealAge)">
+        <rect x="10" y="10" width="76" height="76" rx="4" fill="#b03a24"/>
+        <text x="48" y="69" text-anchor="middle" font-size="54" font-weight="900"
+              fill="#f2eee1" font-family="'Noto Serif SC','Songti SC',serif">秋</text>
+      </g>
+      <rect x="10" y="10" width="76" height="76" fill="#f2eee1" opacity="0.35"
+            filter="url(#sealMottle)" style="mix-blend-mode:screen"/>
+    </svg>秋水居</a>
+  <nav class="topbar-nav">
+    <a href="../../code/">编程</a><a href="../../reading/">阅读</a><a href="../../photos/">摄影</a><a href="../../essays/">随笔</a><a href="../../archive/">归档</a><a href="../../#tools">工具</a>
+  </nav>
+</header>
+
+<main class="sub-main">
+
+  <article class="reader-article sub-article">
+    <p class="reader-cat">ESSAYS · 随笔</p>
+    <h1 class="reader-title">Meloday</h1>
+    <div class="reader-meta">
+      <span>2026.08.11</span>
+      <span></span>
+      <span>约 2 分钟</span>
+    </div>
+    
+    <div class="reader-body">
+      <p><a href="https://github.com/cpc1513/Meloday.git" target="_blank" rel="noopener">https://github.com/cpc1513/Meloday.git</a></p>
+      <p>Meloday 是一款面向 Windows 的 AI 音乐日记应用。你写下当天发生了什么、心情如何，应用会通过 AI 理解文字里的情绪、场景和节奏，再为这一天生成一张私人歌单。日记、情绪和歌单会按日期保存在本机，之后可以从日历、历史记录和播放器里重新打开。</p>
+      <h2><strong>应用截图</strong></h2>
+      <h3><strong>写下今天，生成今日音乐</strong></h3>
+      <figure class="reader-fig"><img src="../../https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/dairy.png" alt="Meloday diary screen"><figcaption>Meloday diary screen</figcaption></figure>
+      <h3><strong>在播放器中查看歌词、歌单和收藏状态</strong></h3>
+      <figure class="reader-fig"><img src="../../https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/player.png" alt="Meloday player screen"><figcaption>Meloday player screen</figcaption></figure>
+      <h3><strong>用日历回看每天的情绪和音乐</strong></h3>
+      <figure class="reader-fig"><img src="../../https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/calendar.png" alt="Meloday calendar screen"><figcaption>Meloday calendar screen</figcaption></figure>
+      <h3><strong>在历史里找回过去的日记</strong></h3>
+      <figure class="reader-fig"><img src="../../https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/history.png" alt="Meloday history screen"><figcaption>Meloday history screen</figcaption></figure>
+      <h2><strong>功能</strong></h2>
+      <p><strong>AI 音乐日记</strong>：输入一段日记，Meloday 会根据内容生成当天歌单。</p>
+      <p><strong>情绪理解</strong>：AI 会分析日记里的情绪、场景和具体线索，不只是套用情绪模板。</p>
+      <p><strong>云端免费额度</strong>：新用户可使用官方云端 AI 网关的免费额度；额度用完后可在设置中填写自己的 DeepSeek API Key。</p>
+      <p><strong>QQ 音乐匹配</strong>：后端会把 AI 推荐转成 QQ 音乐可检索、尽量可播放的歌曲。</p>
+      <p><strong>播放器与歌词</strong>：提供底部迷你播放器和独立播放器页，支持歌词显示、进度、音量、收藏和歌单切换。</p>
+      <p><strong>日历与历史</strong>：每天的日记、情绪、节日信息和歌单会按日期保存，支持历史搜索和删除。</p>
+      <p><strong>本地优先</strong>：日记和歌单数据默认保存在当前 Windows 用户目录下的 SQLite 数据库中。</p>
+    </div>
+    <div class="reader-fin">完</div>
+    <nav class="reader-pn">
+      <a class="disabled"><span class="pn-label">上一篇</span><span class="pn-title">—— 已是卷首 ——</span></a>
+      <a class="disabled"><span class="pn-label">下一篇</span><span class="pn-title">—— 已是卷尾 ——</span></a>
+    </nav>
+    <p class="arch-back"><a href="../../essays/">← 返回随笔卷</a></p>
+  </article>
+</main>
+
+<footer class="sub-footer">
+  <svg viewBox="0 0 96 96" width="40" height="40" role="img" aria-label="秋水居印章">
+      <g filter="url(#sealAge)">
+        <rect x="10" y="10" width="76" height="76" rx="4" fill="#b03a24"/>
+        <text x="48" y="69" text-anchor="middle" font-size="54" font-weight="900"
+              fill="#f2eee1" font-family="'Noto Serif SC','Songti SC',serif">秋</text>
+      </g>
+      <rect x="10" y="10" width="76" height="76" fill="#f2eee1" opacity="0.35"
+            filter="url(#sealMottle)" style="mix-blend-mode:screen"/>
+    </svg>
+  <span class="footer-copy">© 2019 – 2026 秋水居 · 以文会友，缓步当车</span>
+  <a class="back-home" href="../../">回到长卷 →</a>
+</footer>
+
+</body>
+</html>

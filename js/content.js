@@ -12,6 +12,34 @@ const CHAPTERS = [
 
 const POSTS = {
 
+  '1': {
+    cat: '随笔', catEn: 'ESSAYS', title: 'Meloday',
+    date: '2026.08.11', tags: [], mins: 2,
+    excerpt: '一款面向 Windows 的 AI 音乐日记应用',
+    body: [
+      '[https://github.com/cpc1513/Meloday.git](https://github.com/cpc1513/Meloday.git)',
+      'Meloday 是一款面向 Windows 的 AI 音乐日记应用。你写下当天发生了什么、心情如何，应用会通过 AI 理解文字里的情绪、场景和节奏，再为这一天生成一张私人歌单。日记、情绪和歌单会按日期保存在本机，之后可以从日历、历史记录和播放器里重新打开。',
+      '## **应用截图**',
+      '### **写下今天，生成今日音乐**',
+      '![Meloday diary screen](https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/dairy.png)',
+      '### **在播放器中查看歌词、歌单和收藏状态**',
+      '![Meloday player screen](https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/player.png)',
+      '### **用日历回看每天的情绪和音乐**',
+      '![Meloday calendar screen](https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/calendar.png)',
+      '### **在历史里找回过去的日记**',
+      '![Meloday history screen](https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/history.png)',
+      '## **功能**',
+      '**AI 音乐日记**：输入一段日记，Meloday 会根据内容生成当天歌单。',
+      '**情绪理解**：AI 会分析日记里的情绪、场景和具体线索，不只是套用情绪模板。',
+      '**云端免费额度**：新用户可使用官方云端 AI 网关的免费额度；额度用完后可在设置中填写自己的 DeepSeek API Key。',
+      '**QQ 音乐匹配**：后端会把 AI 推荐转成 QQ 音乐可检索、尽量可播放的歌曲。',
+      '**播放器与歌词**：提供底部迷你播放器和独立播放器页，支持歌词显示、进度、音量、收藏和歌单切换。',
+      '**日历与历史**：每天的日记、情绪、节日信息和歌单会按日期保存，支持历史搜索和删除。',
+      '**本地优先**：日记和歌单数据默认保存在当前 Windows 用户目录下的 SQLite 数据库中。',
+    ],
+    bodyHtml: '<p><a href="https://github.com/cpc1513/Meloday.git" target="_blank" rel="noopener">https://github.com/cpc1513/Meloday.git</a></p><p>Meloday 是一款面向 Windows 的 AI 音乐日记应用。你写下当天发生了什么、心情如何，应用会通过 AI 理解文字里的情绪、场景和节奏，再为这一天生成一张私人歌单。日记、情绪和歌单会按日期保存在本机，之后可以从日历、历史记录和播放器里重新打开。</p><h2><strong>应用截图</strong></h2><h3><strong>写下今天，生成今日音乐</strong></h3><figure class="reader-fig"><img src="https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/dairy.png" alt="Meloday diary screen"><figcaption>Meloday diary screen</figcaption></figure><h3><strong>在播放器中查看歌词、歌单和收藏状态</strong></h3><figure class="reader-fig"><img src="https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/player.png" alt="Meloday player screen"><figcaption>Meloday player screen</figcaption></figure><h3><strong>用日历回看每天的情绪和音乐</strong></h3><figure class="reader-fig"><img src="https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/calendar.png" alt="Meloday calendar screen"><figcaption>Meloday calendar screen</figcaption></figure><h3><strong>在历史里找回过去的日记</strong></h3><figure class="reader-fig"><img src="https://github.com/cpc1513/Meloday/raw/main/docs/screenshots/history.png" alt="Meloday history screen"><figcaption>Meloday history screen</figcaption></figure><h2><strong>功能</strong></h2><p><strong>AI 音乐日记</strong>：输入一段日记，Meloday 会根据内容生成当天歌单。</p><p><strong>情绪理解</strong>：AI 会分析日记里的情绪、场景和具体线索，不只是套用情绪模板。</p><p><strong>云端免费额度</strong>：新用户可使用官方云端 AI 网关的免费额度；额度用完后可在设置中填写自己的 DeepSeek API Key。</p><p><strong>QQ 音乐匹配</strong>：后端会把 AI 推荐转成 QQ 音乐可检索、尽量可播放的歌曲。</p><p><strong>播放器与歌词</strong>：提供底部迷你播放器和独立播放器页，支持歌词显示、进度、音量、收藏和歌单切换。</p><p><strong>日历与历史</strong>：每天的日记、情绪、节日信息和歌单会按日期保存，支持历史搜索和删除。</p><p><strong>本地优先</strong>：日记和歌单数据默认保存在当前 Windows 用户目录下的 SQLite 数据库中。</p>',
+  },
+
   'webapp': {
     cat: '编程', catEn: 'CODE', title: '文字炼金坊',
     date: '2026.08.10', tags: [], mins: 2,

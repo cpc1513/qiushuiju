@@ -6,6 +6,13 @@
     <description>写代码，读书，拍照，随手记 —— 一人的湖畔。</description>
     <language>zh-CN</language>
     <item>
+      <title>Meloday</title>
+      <link>/post/1/</link>
+      <guid>/post/1/</guid>
+      <pubDate>Tue, 11 Aug 2026 00:00:00 GMT</pubDate>
+      <description>一款面向 Windows 的 AI 音乐日记应用</description>
+    </item>
+    <item>
       <title>文字炼金坊</title>
       <link>/post/webapp/</link>
       <guid>/post/webapp/</guid>
