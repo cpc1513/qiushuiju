@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>秋水居 · 案头</title>
+<link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+<div id="app">
+  <nav id="side">
+    <div class="seal">秋水<br>案头</div>
+    <button data-view="dashboard" class="on" title="仪表盘">览</button>
+    <button data-view="posts" title="文章">文</button>
+    <button data-view="gallery" title="图库">图</button>
+    <button data-view="tools" title="工具清单">具</button>
+    <button data-view="publish" title="发布">发</button>
+  </nav>
+  <aside id="list-panel"></aside>
+  <main id="workspace"></main>
+</div>
+<div id="popover-root"></div>
+<div id="toast-root"></div>
+<script src="/vendor/tiptap.js"></script>
+<script src="/md-convert.js"></script>
+<script src="/editor.js"></script>
+<script src="/admin.js"></script>
+</body>
+</html>

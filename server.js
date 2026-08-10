@@ -238,17 +238,21 @@ const server = http.createServer(async (req, res) => {
     }
 
     /* ---------- 静态 ---------- */
-    if (p === '/' || p === '/index.html') return void serveFile(res, path.join(ADMIN, 'index.html')) || json(res, { error: 'not found' }, 404);
+    if (p === '/' || p === '/index.html') return serveFile(res, path.join(ADMIN, 'index.html')) || json(res, { error: 'not found' }, 404);
     if (p.startsWith('/vendor/')) {
       const f = path.join(ADMIN, 'vendor', path.basename(p));
-      return void serveFile(res, f) || json(res, { error: 'not found' }, 404);
+      return serveFile(res, f) || json(res, { error: 'not found' }, 404);
     }
     for (const f of ['admin.css', 'admin.js', 'editor.js', 'md-convert.js']) {
-      if (p === '/' + f) return void serveFile(res, path.join(ADMIN, f)) || json(res, { error: 'not found' }, 404);
+      if (p === '/' + f) return serveFile(res, path.join(ADMIN, f)) || json(res, { error: 'not found' }, 404);
+    }
+    if (p.startsWith('/assets/photos/')) {
+      const f = path.join(PHOTOS, path.basename(decodeURIComponent(p.slice(15))));
+      return serveFile(res, f) || json(res, { error: 'not found' }, 404);
     }
     if (p.startsWith('/photos/')) {
       const f = path.join(PHOTOS, path.basename(decodeURIComponent(p.slice(8))));
-      return void serveFile(res, f) || json(res, { error: 'not found' }, 404);
+      return serveFile(res, f) || json(res, { error: 'not found' }, 404);
     }
 
     json(res, { error: 'not found' }, 404);
