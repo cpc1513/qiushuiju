@@ -15,7 +15,6 @@ const ROOT = __dirname;
 const POSTS = path.join(ROOT, 'posts');
 const PHOTOS = path.join(ROOT, 'assets', 'photos');
 const ADMIN = path.join(ROOT, 'admin');
-const TOOLS_FILE = path.join(ADMIN, 'tools.json');
 const PORT = 3210;
 
 const SLUG_RE = /^[a-z0-9-]+$/;
@@ -96,15 +95,6 @@ function deletePost(slug) {
   return false;
 }
 
-/* ---------------- 工具清单 ---------------- */
-function readTools() {
-  if (!fs.existsSync(TOOLS_FILE)) return [];
-  try { return JSON.parse(fs.readFileSync(TOOLS_FILE, 'utf8')); } catch { return []; }
-}
-function writeTools(tools) {
-  fs.writeFileSync(TOOLS_FILE, JSON.stringify(tools, null, 2));
-}
-
 /* ---------------- 请求辅助 ---------------- */
 function readBody(req) {
   return new Promise((res, rej) => {
@@ -180,14 +170,6 @@ const server = http.createServer(async (req, res) => {
       const { slug } = JSON.parse((await readBody(req)).toString('utf8'));
       if (!isValidSlug(slug)) return json(res, { error: 'slug 只能用小写英文、数字、连字符' }, 400);
       deletePost(slug);
-      return json(res, { ok: true });
-    }
-
-    /* ---------- 工具 API ---------- */
-    if (p === '/api/tools' && req.method === 'GET') return json(res, { tools: readTools() });
-    if (p === '/api/tools' && req.method === 'POST') {
-      const { tools } = JSON.parse((await readBody(req)).toString('utf8'));
-      writeTools(tools);
       return json(res, { ok: true });
     }
 

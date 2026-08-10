@@ -146,7 +146,7 @@ async function renderDashboard() {
 }
 
 /* ---------- 文章模块 ---------- */
-const CATS = { code: '编程', reading: '阅读', essays: '随笔', photos: '摄影' };
+const CATS = { code: '编程', reading: '阅读', essays: '随笔', photos: '摄影', tools: '工具' };
 
 async function renderPostList() {
   const lp = $('#list-panel');
@@ -159,14 +159,8 @@ async function renderPostList() {
       </select>
     </div>
     <button class="btn primary" id="post-new" style="width:100%;margin-bottom:10px">＋ 新文章</button>
-    <div id="post-items"><p class="muted">加载中…</p></div>
-    <div class="list-sep"></div>
-    <div class="post-item tools-entry" id="tools-entry">
-      <div class="t">案头工具</div>
-      <div class="m">首页「案头」栏目清单</div>
-    </div>`;
+    <div id="post-items"><p class="muted">加载中…</p></div>`;
   $('#post-new').addEventListener('click', newPost);
-  $('#tools-entry').addEventListener('click', openToolsView);
   $('#post-search').addEventListener('input', paintPostItems);
   $('#post-cat').addEventListener('change', paintPostItems);
   let posts;
@@ -194,19 +188,6 @@ function paintPostItems() {
     </div>`).join('') || '<p class="muted">没有匹配的文章。</p>';
   $$('#post-items .post-item').forEach(el =>
     el.addEventListener('click', () => openPost(el.dataset.slug)));
-  const te = $('#tools-entry');
-  if (te) te.classList.remove('on');
-}
-
-/* 案头工具是「文」的一种：入口挂在文章列表底部，编辑区共用工作区 */
-function openToolsView() {
-  if (!guardDirty()) return;
-  state.current = null;
-  if (state.kit) { state.kit.destroy(); state.kit = null; }
-  setDirty(false);
-  $$('#post-items .post-item').forEach(el => el.classList.remove('on'));
-  $('#tools-entry').classList.add('on');
-  renderTools();
 }
 
 function renderEditorWelcome() {
@@ -258,6 +239,8 @@ function openEditor(post) {
       </div>
       <div class="field photo-only" style="display:${isPhoto ? '' : 'none'}"><label>图注诗</label><input id="m-poem" value="${esc(m.poem || '')}"></div>
       <div class="field photo-only" style="display:${isPhoto ? '' : 'none'}"><label>季节字</label><input id="m-season" value="${esc(m.season || '')}" placeholder="秋"></div>
+      <div class="field tool-only" style="display:${m.cat === 'tools' ? '' : 'none'}"><label>链接</label><input id="m-url" value="${esc(m.url || '')}" placeholder="https://…"></div>
+      <div class="field tool-only" style="display:${m.cat === 'tools' ? '' : 'none'}"><label>分类字（如 编辑器 / 笔记）</label><input id="m-kind" value="${esc(m.kind || '')}"></div>
     </div>
     <div class="ed-toolbar" id="ed-toolbar"></div>
     <div id="ed-mount"></div>
@@ -271,8 +254,9 @@ function openEditor(post) {
     </div>`;
 
   $('#m-cat').addEventListener('change', () => {
-    const show = $('#m-cat').value === 'photos';
-    $$('.photo-only').forEach(el => { el.style.display = show ? '' : 'none'; });
+    const v = $('#m-cat').value;
+    $$('.photo-only').forEach(el => { el.style.display = v === 'photos' ? '' : 'none'; });
+    $$('.tool-only').forEach(el => { el.style.display = v === 'tools' ? '' : 'none'; });
     setDirty(true);
   });
   $$('.ed-meta input, .ed-meta select').forEach(el =>
@@ -347,6 +331,10 @@ function collectMeta() {
     meta.img = $('#m-img').value.trim();
     meta.poem = $('#m-poem').value.trim();
     meta.season = $('#m-season').value.trim();
+  }
+  if (cat === 'tools') {
+    meta.url = $('#m-url').value.trim();
+    meta.kind = $('#m-kind').value.trim();
   }
   return meta;
 }
@@ -446,54 +434,6 @@ async function renderGallery() {
       renderGallery();
     } catch (e) { toast('删除失败：' + e.message, true); }
   }));
-}
-
-/* ---------- 工具清单 ---------- */
-async function renderTools() {
-  const w = $('#workspace');
-  w.innerHTML = '<h2 class="view-title">工具清单</h2><p class="muted">加载中…</p>';
-  let tools;
-  try {
-    ({ tools } = await api('/api/tools'));
-  } catch (e) {
-    if (state.view !== 'posts') return;
-    w.innerHTML = `<h2 class="view-title">工具清单</h2><p class="muted">加载失败：${esc(e.message)}</p>`;
-    return;
-  }
-  if (state.view !== 'posts') return;
-  w.innerHTML = `
-    <h2 class="view-title">工具清单</h2>
-    <p class="muted">首页「案头」栏目内容，保存后需重新构建生效。</p>
-    <table class="tools-table"><tbody id="tools-body"></tbody></table>
-    <p style="margin-top:12px">
-      <button class="btn" id="tools-add">＋ 加一行</button>
-      <button class="btn primary" id="tools-save">保存</button>
-    </p>`;
-  const body = $('#tools-body');
-  const row = (t = {}) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><input data-k="name" value="${esc(t.name || '')}" placeholder="名称"></td>
-      <td><input data-k="kind" value="${esc(t.kind || '')}" placeholder="分类"></td>
-      <td style="width:42%"><input data-k="desc" value="${esc(t.desc || '')}" placeholder="一句话描述"></td>
-      <td><input data-k="url" value="${esc(t.url || '')}" placeholder="https://…"></td>
-      <td><button class="btn danger">删</button></td>`;
-    tr.querySelector('button').addEventListener('click', () => tr.remove());
-    body.appendChild(tr);
-  };
-  tools.forEach(t => row(t));
-  $('#tools-add').addEventListener('click', () => row());
-  $('#tools-save').addEventListener('click', async () => {
-    const list = $$('#tools-body tr').map(tr => {
-      const o = {};
-      $$('input', tr).forEach(i => { o[i.dataset.k] = i.value.trim(); });
-      return o;
-    }).filter(t => t.name);
-    try {
-      await api('/api/tools', 'POST', { tools: list });
-      toast('已保存工具清单');
-    } catch (e) { toast('保存失败：' + e.message, true); }
-  });
 }
 
 /* ---------- 发布 ---------- */

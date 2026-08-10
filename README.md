@@ -10,7 +10,7 @@
 npm run admin     # 或 node server.js → http://localhost:3210
 ```
 
-本地写作后台：所见即所得编辑（支持文中链接 / 插图）、图库管理、工具清单、一键构建推送。仅本地工具，不参与线上。
+本地写作后台：所见即所得编辑（支持文中链接 / 插图）、图库管理、一键构建推送。仅本地工具，不参与线上。「案头」工具也是文章的一种——新建板块为「工具」的文章，填上链接与分类字即可。
 
 ## 发一篇新文章
 
@@ -74,7 +74,7 @@ node build.js && python3 -m http.server 8000
 posts/            全部文章（Markdown，唯一内容源）
 build.js          构建脚本：md → content.js + 归档/板块/文章页 + RSS + sitemap
 server.js         本地编辑后台服务（仅本地，不部署）
-admin/            编辑后台前端（编辑器 / 图库 / 工具清单 / 发布）
+admin/            编辑后台前端（编辑器 / 图库 / 发布）
 index.html        首页（长卷）
 archive/          全部文字归档（构建产物）
 code|reading|essays|photos/   板块页（构建产物）

@@ -28,8 +28,9 @@ const CATS = {
   reading: { num: '贰', cn: '阅读', en: 'READING', motto: '与书对坐，如晤故人。',       href: 'reading/' },
   photos:  { num: '叁', cn: '摄影', en: 'PHOTOS',  motto: '光是水写的字。',             href: 'photos/' },
   essays:  { num: '肆', cn: '随笔', en: 'ESSAYS',  motto: '随意走笔，不着急抵达。',     href: 'essays/' },
+  tools:   { num: '伍', cn: '工具', en: 'TOOLS',   motto: '器以载道，物以养心。',       href: '' },   // 只在首页「案头」呈现，无板块页/文章页/归档
 };
-const CHAPTER_ORDER = ['code', 'reading', 'photos', 'essays'];
+const CHAPTER_ORDER = ['code', 'reading', 'photos', 'essays', 'tools'];
 
 /* ---------------- front matter 解析 ---------------- */
 function parseFM(text) {
@@ -78,6 +79,8 @@ function loadPosts() {
         img: meta.img || null,
         poem: meta.poem || null,
         season: meta.season || '秋',
+        kind: meta.kind || null,     // 工具板块：分类字（如 编辑器）
+        url: meta.url || null,       // 工具板块：外链
         excerpt: meta.excerpt || (paras[0] ? (stripMd(paras[0]) || paras[0]).slice(0, 90) + '……' : ''),
         body: paras,
         year: (meta.date || '').slice(0, 4),
@@ -93,20 +96,11 @@ function loadPosts() {
   return posts;
 }
 
-/* 工具：优先读 admin/tools.json（后台可编辑），否则用内置默认 */
+/* 案头工具：cat=tools 的文章，title→名称、kind→分类、excerpt→描述、url→外链 */
 function loadTools() {
-  const f = path.join(ROOT, 'admin', 'tools.json');
-  if (fs.existsSync(f)) {
-    try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { /* fallthrough */ }
-  }
-  return [
-    { name: 'Neovim',        kind: '编辑器', desc: '十年磨一剑的配置，最后删到只剩三十行。', url: 'https://neovim.io' },
-    { name: 'Obsidian',      kind: '笔  记', desc: '第二大脑不必宏大，能找到三年前的念头就好。', url: 'https://obsidian.md' },
-    { name: 'Raycast',       kind: '启动器', desc: '⌘ + Space 之后，万事皆可期。', url: 'https://www.raycast.com' },
-    { name: 'Fujifilm X100V',kind: '相  机', desc: '不能换镜头，于是学会了多走两步。', url: 'https://fujifilm-x.com' },
-    { name: 'LAMY 2000',     kind: '钢  笔', desc: '手写的字比敲出来的慢，也比敲出来的像自己。', url: 'https://www.lamy.com' },
-    { name: 'Hario V60',     kind: '手  冲', desc: '两分钟的等待，是早晨唯一的仪式。', url: 'https://hario.co.jp' },
-  ];
+  return byCat('tools').map(p => ({
+    name: p.title, kind: p.kind || '', desc: p.excerpt, url: p.url || '',
+  }));
 }
 
 const POSTS = loadPosts();
@@ -122,7 +116,7 @@ function buildContentJS() {
     return `  { id: '${id}', num: '${c.num}', cn: '${c.cn}', en: '${c.en}', motto: '${c.motto}', href: '${c.href}' },`;
   }).join('\n');
 
-  const postsObj = POSTS.map(p => {
+  const postsObj = POSTS.filter(p => p.cat !== 'tools').map(p => {
     const imgLine = p.img ? `\n    img: '${p.img}',` : '';
     const bodyLines = p.body.map(t => `      '${esc(t)}',`).join('\n');
     // 首页浮层阅读器用的预渲染正文（根路径，图片无需前缀）；压成单行便于字符串字面量
@@ -155,7 +149,6 @@ ${bodyLines}
 
 const CHAPTERS = [
 ${chapters}
-  { id: 'tools',   num: '伍', cn: '工具', en: 'TOOLS',   motto: '器以载道，物以养心。' },
 ];
 
 const POSTS = {
@@ -174,7 +167,7 @@ ${tools}
 ];
 `;
   fs.writeFileSync(path.join(ROOT, 'js/content.js'), out);
-  return POSTS.length;
+  return POSTS.filter(p => p.cat !== 'tools').length;   // 日志篇数不含工具
 }
 
 /* ---------------- 公共模板 ---------------- */
@@ -259,9 +252,10 @@ function postRowHTML(p, depth) {
 
 /* ---------------- 二 · 归档页（按年份） ---------------- */
 function buildArchive() {
-  const years = [...new Set(POSTS.map(p => p.year))].sort().reverse();
+  const texts = POSTS.filter(p => p.cat !== 'tools');   // 工具只在首页「案头」，不归档
+  const years = [...new Set(texts.map(p => p.year))].sort().reverse();
   const sections = years.map(y => {
-    const rows = POSTS.filter(p => p.year === y).map(p => postRowHTML(p, 1)).join('\n');
+    const rows = texts.filter(p => p.year === y).map(p => postRowHTML(p, 1)).join('\n');
     return `<section class="arch-year">
       <h2 class="arch-year-title"><span>${y}</span></h2>
       <ul class="post-list">${rows}</ul>
@@ -272,7 +266,7 @@ function buildArchive() {
   <header class="sub-head">
     <p class="chapter-kicker">ARCHIVE · 总目</p>
     <h1 class="sub-title">全部文字</h1>
-    <p class="sub-motto">${POSTS.length} 篇，自二〇一九年至今，按年份排列。</p>
+    <p class="sub-motto">${texts.length} 篇，自二〇一九年至今，按年份排列。</p>
   </header>
   ${sections}`;
 
@@ -323,6 +317,7 @@ function buildCatPages() {
 /* ---------------- 四 · 独立文章页 ---------------- */
 function buildPostPages() {
   for (const p of POSTS) {
+    if (p.cat === 'tools') continue;   // 工具不生成独立文章页
     const c = CATS[p.cat];
     const siblings = byCat(p.cat);
     const idx = siblings.indexOf(p);
