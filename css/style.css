@@ -859,3 +859,33 @@ main { padding-left: var(--rail-w); }
 .chapter-more svg path { transition: transform .45s var(--ease-out); transform-origin: center; }
 .chapter-more:hover { color: var(--cinnabar); border-color: var(--cinnabar); }
 .chapter-more:hover svg path { transform: translateX(5px); }
+/* ---- 正文扩展元素（build.js renderBody 产物） ---- */
+.reader-body h2 {
+  font-size: 1.35rem; font-weight: 700; line-height: 1.6;
+  margin: 2.6rem 0 1.4rem; color: var(--ink);
+}
+.reader-body h3 {
+  font-size: 1.12rem; font-weight: 700; line-height: 1.6;
+  margin: 2.2rem 0 1.2rem; color: var(--ink);
+}
+.reader-body blockquote {
+  margin: 0 0 1.9rem; padding: .2rem 0 .2rem 1.2rem;
+  border-left: 3px solid var(--cinnabar);
+  color: var(--ink-3); font-size: .98rem; line-height: 2.1;
+}
+.reader-body hr.reader-hr {
+  border: none; margin: 2.8rem auto; width: 4rem; height: 1px;
+  background: var(--line);
+}
+.reader-body figure.reader-fig { margin: 0 0 1.9rem; }
+.reader-body figure.reader-fig img { width: 100%; display: block; }
+.reader-body figure.reader-fig figcaption {
+  margin-top: .7rem; text-align: center;
+  font-family: var(--sans); font-size: .7rem; letter-spacing: .2em; color: var(--ink-3);
+}
+.reader-body a {
+  color: var(--cinnabar); text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--cinnabar) 40%, transparent);
+  transition: border-color .3s;
+}
+.reader-body a:hover { border-bottom-color: var(--cinnabar); }

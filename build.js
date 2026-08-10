@@ -13,6 +13,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { renderBody } = require('./lib/markdown');
 
 const ROOT = __dirname;
 const SITE = {
@@ -340,7 +341,7 @@ function buildPostPages() {
     </div>
     ${imgBlock}
     <div class="reader-body">
-      ${p.body.map(t => `<p>${t}</p>`).join('\n      ')}
+      ${renderBody(p.body, '../../')}
     </div>
     <div class="reader-fin">完</div>
     <nav class="reader-pn">
