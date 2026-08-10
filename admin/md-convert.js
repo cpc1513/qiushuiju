@@ -15,9 +15,14 @@
   }
 
   /* ---- md → html（喂给 TipTap setContent） ---- */
+  /* URL 支持一层平衡括号，与 lib/markdown.js 的 URL_SRC 保持一致 */
+  const URL_SRC = '[^()\\s]+(?:\\([^()\\s]*\\)[^()\\s]*)*';
+  const LINK_RE = new RegExp('\\[([^\\]]+)\\]\\((' + URL_SRC + ')\\)', 'g');
+  const IMG_RE = new RegExp('^!\\[([^\\]]*)\\]\\((' + URL_SRC + ')\\)$');
+
   function inlineToHtml(s) {
     let t = escHtml(s);
-    t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+    t = t.replace(LINK_RE, '<a href="$2">$1</a>');
     t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     t = t.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     return t;
@@ -25,7 +30,7 @@
 
   function mdToHtml(md) {
     return (md || '').split(/\n\s*\n/).map(s => s.trim()).filter(Boolean).map(b => {
-      const img = b.match(/^!\[([^\]]*)\]\(([^)\s]+)\)$/);
+      const img = b.match(IMG_RE);
       if (img) return `<img src="${escHtml(img[2])}" alt="${escHtml(img[1])}">`;
       if (b === '---') return '<hr>';
       if (b.startsWith('### ')) return `<h3>${inlineToHtml(b.slice(4))}</h3>`;

@@ -22,6 +22,12 @@ test('mdToHtml: 块级元素', () => {
     '<img src="assets/photos/a.jpg" alt="天池">');
 });
 
+test('mdToHtml: URL 支持一层平衡括号', () => {
+  assert.strictEqual(
+    mdToHtml('见[维基](https://zh.wikipedia.org/wiki/甲_(天干))'),
+    '<p>见<a href="https://zh.wikipedia.org/wiki/甲_(天干)">维基</a></p>');
+});
+
 test('jsonToMd: 行内 marks（粗/斜/链接）', () => {
   const doc = { type: 'doc', content: [P(
     T('见'),
