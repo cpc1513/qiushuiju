@@ -6,6 +6,13 @@
   "scripts": {
     "build": "node build.js",
     "serve": "node build.js && python3 -m http.server 8000",
-    "test": "node --test"
+    "test": "node --test",
+    "bundle:tiptap": "esbuild admin/vendor-src/tiptap-entry.js --bundle --minify --format=iife --global-name=TipTap --outfile=admin/vendor/tiptap.js"
+  },
+  "devDependencies": {
+    "@tiptap/core": "^3.29.2",
+    "@tiptap/extension-image": "^3.29.2",
+    "@tiptap/starter-kit": "^3.29.2",
+    "esbuild": "^0.28.2"
   }
 }
