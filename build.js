@@ -32,6 +32,7 @@ const CHAPTER_ORDER = ['code', 'reading', 'photos', 'essays'];
 
 /* ---------------- front matter 解析 ---------------- */
 function parseFM(text) {
+  text = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');   // 兼容 BOM 与 CRLF
   const m = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
   if (!m) throw new Error('front matter 缺失');
   const meta = {};
@@ -91,12 +92,8 @@ function loadPosts() {
   return posts;
 }
 
-/* 工具：优先读 admin/tools.json（后台可编辑），否则用内置默认 */
+/* 工具列表（内置默认） */
 function loadTools() {
-  const f = path.join(ROOT, 'admin', 'tools.json');
-  if (fs.existsSync(f)) {
-    try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { /* fallthrough */ }
-  }
   return [
     { name: 'Neovim',        kind: '编辑器', desc: '十年磨一剑的配置，最后删到只剩三十行。', url: 'https://neovim.io' },
     { name: 'Obsidian',      kind: '笔  记', desc: '第二大脑不必宏大，能找到三年前的念头就好。', url: 'https://obsidian.md' },
